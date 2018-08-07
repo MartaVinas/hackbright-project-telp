@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block content %}
+
+    <h1>TELP</h1>
+    <br>
+
+    <p>Tip help: Introduce the restaurant name or the zipcode and it will show the average tip and a tip-calculator to help you.</p>
+    <br>
+
+    <form action="/get-name" method="GET">
+        Restaurant name <input type="text" name="restaurant_name" required="False">
+        <br>
+        Zipcode <input type="text" name="zipcode" required="False">
+        <br>
+        <input type="submit" name="search" value="Search">
+    </form>
+    <br>
+
+{% endblock %}
