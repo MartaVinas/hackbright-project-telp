@@ -29,26 +29,45 @@ def homepage():
 
 @app.route('/search-restaurant', methods=['GET'])
 def search_restaurant():
-    """Search the user restaurant in the db."""
+    """Search the user restaurant in telp_db."""
 
     # get restaurant name from the user
     restaurant_name = request.args.get("restaurant_name")
 
     # search restaurant in telp db and get all restaurants objects with that name
-    restaurants_in_db = db.session.query(Restaurant).filter_by(name=restaurant_name).all()
+    restaurants_in_db = db.session.query(Restaurant).filter_by(name=restaurant_name).first()
 
     if restaurants_in_db is None:
-        # if restaurant is not in telp db, search it in YELP
+        # if restaurant is not in telp_db, search it in YELP
         restaurants_in_yelp = search_restaurants_by_name(restaurant_name)
 
-        if restaurants_in_yelp:
+        if restaurants_in_yelp is not None:
             # add into telp db
+            add_restaurants_to_db(restaurants_in_yelp)
             return render_template("show-restaurants.html", restaurants_in_yelp=restaurants_in_yelp)
         else:
             # show a message
             return "Not Found"
     else:
         return render_template("tip-info-calc.html", restaurants_in_db=restaurants_in_db)
+
+
+def add_restaurants_to_db(restaurants):
+    """Store restaurants from YELP into telp_db."""
+
+    for restaurant in restaurants['businesses']:
+
+        new_restaurant = Restaurant(yelp_restaurant_id=restaurant['id'],
+                                name=restaurant['name'],
+                                address=restaurant['location']['address1'],
+                                zipcode=restaurant['location']['zip_code'],
+                                rating=restaurant['rating'])
+
+        db.session.add(new_restaurant)
+
+    db.session.commit()
+
+
 
 
 #----------------------------------------------------------------------------#

@@ -17,7 +17,7 @@ def search_restaurants_by_name(name, city = "San Francisco"):
     {'businesses':[
                     {'id': value, 'name': value, 'rating': value,
                     'location': {'address1': value, 'zip_code': value}
-                    }
+                    },
                     {other restaurant}
                     ...
                 ]
@@ -52,7 +52,7 @@ def search_restaurants(city = "San Francisco"):
         {'businesses':[
                         {'id': value, 'name': value, 'rating': value,
                         'location': {'address1': value, 'zip_code': value}
-                        }
+                        },
                         {other restaurant} since limit
                         ...
                     ]
