@@ -10,12 +10,15 @@
     <p>Tip help: Introduce the restaurant name or the zipcode and it will show the average tip and a tip-calculator to help you.</p>
     <br>
 
-    <form action="/get-name" method="GET">
-        Restaurant name <input type="text" name="restaurant_name" required="False">
-        <br>
-        Zipcode <input type="text" name="zipcode" required="False">
-        <br>
-        <input type="submit" name="search" value="Search">
+    <form action="/search-restaurant" method="GET">
+        Restaurant name: <input type="text" name="restaurant_name" required="False">
+        <input type="submit" name="search" value="Search by Restaurant">
+    </form>
+    <br>
+
+    <form action="/search-zipcode" method="GET">
+        Zipcode: <input type="text" name="zipcode" required="False">
+        <input type="submit" name="search" value="Search by Zipcode">
     </form>
     <br>
 

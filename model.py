@@ -38,7 +38,7 @@ class Meal(db.Model):
     meal_id = db.Column(db.Integer,
                          autoincrement=True,
                          primary_key=True)
-    restaurant_id = db.Column(db.Integer, nullable=True)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.restaurant_id'), nullable=False)
     zipcode = db.Column(db.String(20), nullable=False)
     meal_type = db.Column(db.String(20), nullable=True)
     price = db.Column(db.Float, nullable = False)
@@ -78,11 +78,14 @@ class Admin(db.Model):
 #####################################################################
 # Helper functions
 
-def connect_to_db(app):
-    """Connect the database to our Flask app."""
+DB_URI = 'postgresql:///telp_test'
+#DB_URI = 'postgresql:///telp'
 
-    # Configure to use our PostgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///telp'
+def connect_to_db(app):
+    """Connect the database to Flask app."""
+
+    # Configure to use PostgreSQL database
+    app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
