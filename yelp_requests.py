@@ -5,6 +5,12 @@ import os
 import requests
 
 def call_yelp_api(url):
+    """Make a request to YELP API with url given.
+
+    url(url string)
+
+    return json or NONE
+    """
 
     headers = {}
 

@@ -42,48 +42,64 @@ def search_restaurant():
         restaurants_in_yelp = search_restaurants_by_name(restaurant_name)
 
         if restaurants_in_yelp['total'] != 0:
-            # add restaurant into telp_db
-            #add_restaurants_to_db(restaurants_in_yelp)
-
-            return render_template("show-restaurants.html", restaurants_in_yelp=restaurants_in_yelp)
+            # get a list of restaurants and add restaurants into telp_db
+            restaurants_in_db = create_restaurants_list_from_restaurant_json(restaurants_in_yelp)
+            add_restaurants_to_db(restaurants_in_yelp)
+        
         else:
             # show a message
             flash("The restaurant {name} doesn't exist in YELP. You could search average tip information by zipcode.".format(name=restaurant_name))
             return redirect("/")
-    else:
-        return render_template("tip-info-calc.html", restaurants_in_db=restaurants_in_db)
 
+    return render_template("confirm-restaurant.html", restaurants_in_db=restaurants_in_db)
+
+
+def create_restaurants_list_from_restaurant_json(restaurants):
+    """Create restaurants list from YELP restaurants.
+
+    restaurants(json)
+
+    return list of restaurants
+    """
+
+    restaurants_list = []
+    
+    for restaurant in restaurants['businesses']:
+
+        new_restaurant = Restaurant(yelp_restaurant_id=restaurant['id'],
+                                    name=restaurant['name'],
+                                    address=restaurant['location']['address1'],
+                                    zipcode=restaurant['location']['zip_code'],
+                                    rating=restaurant['rating'])
+
+        restaurants_list.append(new_restaurant)
+
+    return restaurants_list
 
 def add_restaurants_to_db(restaurants):
     """Store restaurants from YELP into telp_db.
 
-    restaurants from YELP(json)
+    restaurants(json)
     """
-
-    for restaurant in restaurants['businesses']:
+    new_restaurants = create_restaurants_list_from_restaurant_json(restaurants)
+    
+    for restaurant in new_restaurants:
 
         if not is_restaurant_in_db(restaurant):
 
-            new_restaurant = Restaurant(yelp_restaurant_id=restaurant['id'],
-                                        name=restaurant['name'],
-                                        address=restaurant['location']['address1'],
-                                        zipcode=restaurant['location']['zip_code'],
-                                        rating=restaurant['rating'])
-
-            db.session.add(new_restaurant)
+            db.session.add(restaurant)
 
     db.session.commit()
-
 
 def is_restaurant_in_db(restaurant):
     """Check if restaurant given is in telp_db.
 
-    restaurant(dictionary)
+    restaurant(list)
 
     Return True if already exist or False if not.
     """
 
-    restaurant_in_db = db.session.query(Restaurant).filter(Restaurant.yelp_restaurant_id == restaurant['id']).all()
+    restaurant_in_db = db.session.query(Restaurant).filter(Restaurant.yelp_restaurant_id == restaurant.yelp_restaurant_id).all()
 
     if restaurant_in_db:
         return True
