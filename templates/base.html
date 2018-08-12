@@ -6,5 +6,10 @@
     </head>
     <body>
         {% block content %}BODY CONTENT GOES HERE{% endblock %}
+        <ul>
+            {% for message in get_flashed_messages() %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
     </body>
 </html>

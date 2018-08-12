@@ -3,7 +3,13 @@
 {% block title %}show-restaurants{% endblock %}
 
 {% block content %}
+
+    <ul>
+    {% for business in restaurants_in_yelp['businesses'] %}
     
-    {{ restaurants_in_yelp }}
+        <li>{{ business['name'] }} ({{ business['location']['address1'] }})</li>
+
+    {% endfor %}
+    </ul>
 
 {% endblock %}

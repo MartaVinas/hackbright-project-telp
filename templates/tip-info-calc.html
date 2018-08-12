@@ -4,10 +4,12 @@
 
 {% block content %}
 
-    {% for restaurant in restaurants_in_db %}
+    <ul>
+    {% for business in restaurants_in_db %}
     
-        {{ restaurant }}
+        <li>{{ business['name'] }} ({{ business['address'] }})</li>
 
     {% endfor %}
-
+    </ul>
+    
 {% endblock %}
