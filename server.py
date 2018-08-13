@@ -9,6 +9,8 @@ from model import Restaurant, Meal, Admin, connect_to_db, db
 
 from yelp_requests import search_restaurants_by_name, search_restaurants
 
+from sqlalchemy import func
+
 
 app = Flask(__name__)
 
@@ -35,7 +37,8 @@ def search_restaurant():
     restaurant_name = request.args.get("restaurant_name")
 
     # search restaurant in telp_db and get all restaurants objects with that name
-    restaurants_in_db = db.session.query(Restaurant).filter_by(name=restaurant_name).all()
+    restaurants_in_db = db.session.query(Restaurant).\
+                                filter_by(name=restaurant_name.lower()).all()
 
     if not restaurants_in_db:
         # if restaurant is not in telp_db, search it in YELP
@@ -47,8 +50,8 @@ def search_restaurant():
             add_restaurants_to_db(restaurants_in_yelp)
         
         else:
-            # show a message
-            flash("The restaurant {name} doesn't exist in YELP. You could search average tip information by zipcode.".format(name=restaurant_name))
+            flash("The restaurant {name} doesn't exist in YELP!"
+                " You could search average tip information by zipcode.".format(name=restaurant_name))
             return redirect("/")
 
     return render_template("confirm-restaurant.html", restaurants_in_db=restaurants_in_db)
@@ -67,7 +70,7 @@ def create_restaurants_list_from_restaurant_json(restaurants):
     for restaurant in restaurants['businesses']:
 
         new_restaurant = Restaurant(yelp_restaurant_id=restaurant['id'],
-                                    name=restaurant['name'],
+                                    name=restaurant['name'].lower(),
                                     address=restaurant['location']['address1'],
                                     zipcode=restaurant['location']['zip_code'],
                                     rating=restaurant['rating'])
@@ -99,12 +102,54 @@ def is_restaurant_in_db(restaurant):
     Return True if already exist or False if not.
     """
 
-    restaurant_in_db = db.session.query(Restaurant).filter(Restaurant.yelp_restaurant_id == restaurant.yelp_restaurant_id).all()
+    restaurant_in_db = db.session.query(Restaurant).\
+                                filter(Restaurant.yelp_restaurant_id == restaurant.yelp_restaurant_id).\
+                                all()
 
     if restaurant_in_db:
         return True
 
     return False
+
+
+@app.route('/get-tip-info', methods=['POST'])
+def get_average_tip():
+    """Get average tip info from telp_db"""
+
+    # get restaurant from the user
+    restaurant_yelp_id, restaurant_name = request.form.get("restaurant").split("|")
+    # get average tip from telp_db by restaurant and meal type
+    average_tip_lunch = get_average_tip_by_restaurant(restaurant_yelp_id, 'lunch')
+
+    average_tip_dinner = get_average_tip_by_restaurant(restaurant_yelp_id, 'dinner')
+
+    return render_template("tip-info-calc.html",
+                            restaurant_name=restaurant_name,
+                            restaurant_id=restaurant_yelp_id,
+                            average_tip_lunch=average_tip_lunch, 
+                            average_tip_dinner=average_tip_dinner)
+
+def get_average_tip_by_restaurant(restaurant, meal_type):
+    """Query to telp_db to get the average tip by restaurant and meal_type
+
+    restaurant(string)
+    meal_type(string)
+
+    return a float or NONE
+    """
+
+    average_tip = db.session.query(func.round(func.avg(Meal.percentage_tip), 2)).\
+                    join(Restaurant).\
+                    group_by(Meal.restaurant_id, Meal.meal_type).\
+                    having(Meal.meal_type=='{type}'.format(type=meal_type)).\
+                    filter(Restaurant.yelp_restaurant_id==restaurant).\
+                    first()
+
+    if average_tip:
+        # to parse tupla (Decimal('20.67'),) to 20.67
+        return average_tip[0]
+ 
+    return None
 
 
 #----------------------------------------------------------------------------#

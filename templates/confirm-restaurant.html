@@ -4,12 +4,21 @@
 
 {% block content %}
 
-    <ul>
-    {% for business in restaurants_in_db %}
-    
-        <li>{{ business['name'] }} ({{ business['address'] }})</li>
+    <form action="/get-tip-info" method="POST">
+        What restaurant did you mean?
+        <br>
+        <br>
+        <select name="restaurant">
+            
+            {% for restaurant in restaurants_in_db %}
+                
+                <option value="{{ restaurant['yelp_restaurant_id'] }}|{{ restaurant['name'].capitalize() }}" > {{ restaurant['name'].capitalize() }} ({{ restaurant['address'] }}) </option> 
+                
+            {% endfor %}
+            
+        </select>
+        <input type="submit" value="Go">
+    </form>
+    <br>
 
-    {% endfor %}
-    </ul>
-    
 {% endblock %}

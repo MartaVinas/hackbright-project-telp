@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}tip-info-calc{% endblock %}
+
+{% block content %}
+    
+    <div>
+        <ul>
+            {% if average_tip_lunch and average_tip_dinner %}
+            Restaurant {{restaurant_name}}
+                <li>Lunch average tip: {{ average_tip_lunch }} %</li>
+                <li>Dinner average tip: {{ average_tip_dinner }} %</li>
+            
+            {% elif average_tip_lunch %}
+            Restaurant {{restaurant_name}}
+                <li>Lunch average tip: {{ average_tip_lunch }} %</li>
+            
+            {% elif average_tip_dinner %}
+            Restaurant {{restaurant_name}}
+                <li>Lunch average tip: {{ average_tip_dinner }} %</li>
+            
+            {% else %}
+                <li>Sorry, there is no average information for the restaurant {{restaurant_name}}. Put your price and the tip and be the first one to contribute!</li>
+            {% endif %}
+        </ul> 
+    </div>
+    <div>
+        
+    </div>
+    
+
+{% endblock %}
