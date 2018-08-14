@@ -5,6 +5,7 @@
 {% block content %}
     
     <div>
+        <h1>Tip Information</h1>
         <ul>
             {% if average_tip_lunch and average_tip_dinner %}
             Restaurant {{restaurant_name}}
@@ -20,13 +21,34 @@
                 <li>Lunch average tip: {{ average_tip_dinner }} %</li>
             
             {% else %}
-                <li>Sorry, there is no average information for the restaurant {{restaurant_name}}. Put your price and the tip and be the first one to contribute!</li>
+                <li>Sorry, there is no average information for restaurant {{restaurant_name}}. Put your price and the tip and be the first one to contribute!</li>
             {% endif %}
         </ul> 
     </div>
     <div>
-        
+        <h1>Tip Calculator</h1>
+        <form action="/calculate" method="POST">
+            Price: $ <input type="text" name="price">
+            <br>
+            Tip: <input type="text" name="percentage_tip"> %
+            <br>
+            # Diners: <input type="text" name="diners">
+            <br>
+            <select name="meal_type" required="True">
+                <option value="dinner" > Dinner </option>
+                <option value="lunch" > Lunch </option>    
+            </select>
+            <input type="submit" id="calculate" value="Calculate">
+            <br>
+            Tip: $ <span id="tip_in_dollars">__________</span>
+            <br>
+            Total price: $ <span id="total_price">__________</span>
+            <br>
+            Total price/diner: $ <span id="price_per_diner">__________</span>
+            <br>
+        </form>
     </div>
+<!--     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> -->
+    <script src="/static/js/telp.js"></script>
     
-
 {% endblock %}

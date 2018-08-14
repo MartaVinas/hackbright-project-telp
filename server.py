@@ -2,7 +2,7 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, redirect, request, flash, session
+from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import Restaurant, Meal, Admin, connect_to_db, db
@@ -10,6 +10,8 @@ from model import Restaurant, Meal, Admin, connect_to_db, db
 from yelp_requests import search_restaurants_by_name, search_restaurants
 
 from sqlalchemy import func
+
+from tip_calculator import get_tip_in_dollars, get_total_price, get_price_per_diner
 
 
 app = Flask(__name__)
@@ -140,16 +142,33 @@ def get_average_tip_by_restaurant(restaurant, meal_type):
 
     average_tip = db.session.query(func.round(func.avg(Meal.percentage_tip), 2)).\
                     join(Restaurant).\
-                    group_by(Meal.restaurant_id, Meal.meal_type).\
+                    group_by(Meal.yelp_restaurant_id, Meal.meal_type).\
                     having(Meal.meal_type=='{type}'.format(type=meal_type)).\
                     filter(Restaurant.yelp_restaurant_id==restaurant).\
                     first()
 
     if average_tip:
-        # to parse tupla (Decimal('20.67'),) to 20.67
+        # parse tupla (Decimal('20.67'),) to 20.67
         return average_tip[0]
  
     return None
+
+
+@app.route('/calculate', methods=['POST'])
+def calculate():
+    """Calculate"""
+    print(request.form.get("price"))
+    price = int(request.form.get("price"))
+    tip_percentage = int(request.form.get("percentage_tip"))
+    diners = int(request.form.get("diners"))
+    meal_type = request.form.get("meal_type")
+
+    print("info------------------", price, tip_percentage, diners)
+
+    return jsonify(tip_in_dollars=get_tip_in_dollars(price, tip_percentage),
+                    total_price=get_total_price(price, tip_percentage),
+                    price_per_diner=get_price_per_diner(price, tip_percentage, diners))
+
 
 
 #----------------------------------------------------------------------------#

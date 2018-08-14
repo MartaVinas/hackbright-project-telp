@@ -12,10 +12,7 @@ class Restaurant(db.Model):
 
     __tablename__ = "restaurants"
 
-    restaurant_id = db.Column(db.Integer,
-                        autoincrement=True,
-                        primary_key=True)
-    yelp_restaurant_id = db.Column(db.String(100), nullable=False)
+    yelp_restaurant_id = db.Column(db.String(100), primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     address = db.Column(db.String(200), nullable=False)
     zipcode = db.Column(db.String(20), nullable=False)
@@ -24,9 +21,9 @@ class Restaurant(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return """<Restaurant: restaurant_id = {}, yelp_restaurant_id = {},
+        return """<Restaurant: yelp_restaurant_id = {},
         name = {}, address = {}, zipcode = {}, rating = {}.>""".format(
-            self.restaurant_id, self.yelp_restaurant_id, self.name, 
+            self.yelp_restaurant_id, self.name, 
             self.address, self.zipcode, self.rating)
 
 
@@ -38,7 +35,7 @@ class Meal(db.Model):
     meal_id = db.Column(db.Integer,
                          autoincrement=True,
                          primary_key=True)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.restaurant_id'), nullable=False)
+    yelp_restaurant_id = db.Column(db.String(100), db.ForeignKey('restaurants.yelp_restaurant_id'), nullable=False)
     zipcode = db.Column(db.String(20), nullable=False)
     meal_type = db.Column(db.String(20), nullable=True)
     price = db.Column(db.Float, nullable = False)
@@ -54,7 +51,7 @@ class Meal(db.Model):
 
         return """<Meal: meal_id = {}, restaurant_id = {}, zipcode = {}, 
         meal_type = {}, price = {}, percentage_tip = {}, date = {}.>""".format(
-            self.meal_id, self.restaurant_id, self.zipcode, 
+            self.meal_id, self.yelp_restaurant_id, self.zipcode, 
             self.meal_type, self.price, self.percentage_tip, self.date)
 
 
