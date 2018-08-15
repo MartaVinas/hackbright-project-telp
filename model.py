@@ -23,8 +23,11 @@ class Restaurant(db.Model):
 
         return """<Restaurant: yelp_restaurant_id = {},
         name = {}, address = {}, zipcode = {}, rating = {}.>""".format(
-            self.yelp_restaurant_id, self.name, 
-            self.address, self.zipcode, self.rating)
+            self.yelp_restaurant_id, 
+            self.name, 
+            self.address, 
+            self.zipcode, 
+            self.rating)
 
 
 class Meal(db.Model):
@@ -51,8 +54,13 @@ class Meal(db.Model):
 
         return """<Meal: meal_id = {}, restaurant_id = {}, zipcode = {}, 
         meal_type = {}, price = {}, percentage_tip = {}, date = {}.>""".format(
-            self.meal_id, self.yelp_restaurant_id, self.zipcode, 
-            self.meal_type, self.price, self.percentage_tip, self.date)
+            self.meal_id, 
+            self.yelp_restaurant_id, 
+            self.zipcode, 
+            self.meal_type, 
+            self.price, 
+            self.percentage_tip, 
+            self.date)
 
 
 class Admin(db.Model):
@@ -69,7 +77,9 @@ class Admin(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Admin: admin_id = {}, username = {}.>".format(self.admin_id, self.username)
+        return "<Admin: admin_id = {}, username = {}.>".format(
+            self.admin_id, 
+            self.username)
 
 
 #####################################################################

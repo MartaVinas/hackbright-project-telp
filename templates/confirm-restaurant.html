@@ -7,8 +7,7 @@
     <form action="/get-tip-info" method="POST">
         <p>What restaurant did you mean?</p>  
         <br>
-        <br>
-        <select name="restaurant">
+        <select name="restaurant" required>
             <option>Select your restaurant:</option>
             {% for restaurant in restaurants_in_db %}
             <option value="{{ restaurant['yelp_restaurant_id'] }}|{{ restaurant['name'].capitalize() }}|{{ restaurant['zipcode'] }}">

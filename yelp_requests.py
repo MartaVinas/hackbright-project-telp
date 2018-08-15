@@ -1,8 +1,8 @@
 """Functions to search restaurants in YELP API"""
 
 import os
-
 import requests
+
 
 def call_yelp_api(url):
     """Make a request to YELP API with url given.

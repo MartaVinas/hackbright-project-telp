@@ -1,3 +1,6 @@
+"""Functions to calculate tip in dollars, total price and price per diner"""
+
+
 def get_tip_in_dollars(price, tip_percentage):
     """
     Calculate tip in dollars.

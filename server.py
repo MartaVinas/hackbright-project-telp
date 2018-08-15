@@ -1,16 +1,12 @@
-"""routes for TELP project."""
+"""Routes for TELP project."""
 
 from jinja2 import StrictUndefined
-
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-
-from model import Restaurant, Meal, Admin, connect_to_db, db
-
-from yelp_requests import search_restaurants_by_name, search_restaurants
-
 from sqlalchemy import func
 
+from model import Restaurant, Meal, Admin, connect_to_db, db
+from yelp_requests import search_restaurants_by_name, search_restaurants
 from tip_calculator import get_tip_in_dollars, get_total_price, get_price_per_diner
 
 
@@ -154,7 +150,9 @@ def get_average_tip_by_restaurant(restaurant, meal_type):
 
     if average_tip:
         # parse tupla (Decimal('20.67'),) to 20.67
-        return average_tip[0]
+        #return average_tip[0]
+        average_tip_value, = average_tip
+        return average_tip_value
  
     return None
 
@@ -165,7 +163,7 @@ def add_meal_and_calculate():
 
     return a json with tip in dollars, total price and price per diner
     """
-
+    
     price = float(request.form.get("price"))
 
     percentage_tip = int(request.form.get("percentage_tip"))
@@ -182,7 +180,6 @@ def add_meal_and_calculate():
     db.session.add(new_meal)
 
     db.session.commit()
-
 
     return calculate(price, percentage_tip, diners)
 
