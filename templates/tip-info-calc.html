@@ -8,33 +8,37 @@
         <h1>Tip Information</h1>
         <ul>
             {% if average_tip_lunch and average_tip_dinner %}
-            Restaurant {{restaurant_name}}
+            Restaurant {{ restaurant_name }}
                 <li>Lunch average tip: {{ average_tip_lunch }} %</li>
                 <li>Dinner average tip: {{ average_tip_dinner }} %</li>
             
             {% elif average_tip_lunch %}
-            Restaurant {{restaurant_name}}
+            Restaurant {{ restaurant_name }}
                 <li>Lunch average tip: {{ average_tip_lunch }} %</li>
             
             {% elif average_tip_dinner %}
-            Restaurant {{restaurant_name}}
+            Restaurant {{ restaurant_name }}
                 <li>Lunch average tip: {{ average_tip_dinner }} %</li>
             
             {% else %}
-                <li>Sorry, there is no average information for restaurant {{restaurant_name}}. Put your price and the tip and be the first one to contribute!</li>
+                <li>Sorry, there is no average information for restaurant {{ restaurant_name }}. Put your price and the tip and be the first one to contribute!</li>
             {% endif %}
         </ul> 
     </div>
+
     <div>
         <h1>Tip Calculator</h1>
-        <form action="/calculate" method="POST">
-            Price: $ <input type="text" name="price">
+        <form action="/new-meal" name="meal" method="POST">
+            <input type="hidden" name="restaurant_id" id="restaurant-id-field" value="{{ restaurant_id }}">
+            <input type="hidden" name="restaurant_zipcode" id="restaurant-zipcode-field" value="{{ restaurant_zipcode }}">
+            Price: $ <input type="text" name="price" id="price-field">
             <br>
-            Tip: <input type="text" name="percentage_tip"> %
+            Tip: <input type="text" name="percentage_tip" id="percentage-tip-field"> %
             <br>
-            # Diners: <input type="text" name="diners">
+            # Diners: <input type="text" name="diners" id="diners-field">
             <br>
-            <select name="meal_type" required="True">
+            <select name="meal_type" id="meal-type-field" required>
+                <option>Select your meal type:</option>
                 <option value="dinner" > Dinner </option>
                 <option value="lunch" > Lunch </option>    
             </select>
@@ -48,7 +52,7 @@
             <br>
         </form>
     </div>
-<!--     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="/static/js/telp.js"></script>
     
 {% endblock %}

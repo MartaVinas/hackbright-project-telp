@@ -81,6 +81,7 @@ def create_restaurants_list_from_restaurant_json(restaurants):
 
     return restaurants_list
 
+
 def add_restaurants_to_db(restaurants):
     """Store restaurants from YELP into telp_db.
 
@@ -95,6 +96,7 @@ def add_restaurants_to_db(restaurants):
             db.session.add(restaurant)
 
     db.session.commit()
+
 
 def is_restaurant_in_db(restaurant):
     """Check if restaurant given is in telp_db.
@@ -119,17 +121,20 @@ def get_average_tip():
     """Get average tip info from telp_db"""
 
     # get restaurant from the user
-    restaurant_yelp_id, restaurant_name = request.form.get("restaurant").split("|")
+    restaurant_yelp_id, restaurant_name, restaurant_zipcode = request.form.get("restaurant").split("|")
+    
     # get average tip from telp_db by restaurant and meal type
     average_tip_lunch = get_average_tip_by_restaurant(restaurant_yelp_id, 'lunch')
 
     average_tip_dinner = get_average_tip_by_restaurant(restaurant_yelp_id, 'dinner')
 
     return render_template("tip-info-calc.html",
-                            restaurant_name=restaurant_name,
                             restaurant_id=restaurant_yelp_id,
+                            restaurant_name=restaurant_name,
+                            restaurant_zipcode=restaurant_zipcode,
                             average_tip_lunch=average_tip_lunch, 
                             average_tip_dinner=average_tip_dinner)
+
 
 def get_average_tip_by_restaurant(restaurant, meal_type):
     """Query to telp_db to get the average tip by restaurant and meal_type
@@ -154,21 +159,48 @@ def get_average_tip_by_restaurant(restaurant, meal_type):
     return None
 
 
-@app.route('/calculate', methods=['POST'])
-def calculate():
-    """Calculate"""
-    print(request.form.get("price"))
-    price = int(request.form.get("price"))
-    tip_percentage = int(request.form.get("percentage_tip"))
+@app.route("/new-meal", methods=['POST'])
+def add_meal_and_calculate():
+    """Add a meal to telp_db
+
+    return a json with tip in dollars, total price and price per diner
+    """
+
+    price = float(request.form.get("price"))
+
+    percentage_tip = int(request.form.get("percentage_tip"))
+
     diners = int(request.form.get("diners"))
-    meal_type = request.form.get("meal_type")
 
-    print("info------------------", price, tip_percentage, diners)
+    # add a new meal in telp_db
+    new_meal = Meal(yelp_restaurant_id=request.form.get("restaurant_id"),
+                    zipcode=request.form.get("restaurant_zipcode"),
+                    meal_type=request.form.get("meal_type"),
+                    price=price,
+                    percentage_tip=percentage_tip)
 
-    return jsonify(tip_in_dollars=get_tip_in_dollars(price, tip_percentage),
-                    total_price=get_total_price(price, tip_percentage),
-                    price_per_diner=get_price_per_diner(price, tip_percentage, diners))
+    db.session.add(new_meal)
 
+    db.session.commit()
+
+
+    return calculate(price, percentage_tip, diners)
+
+
+def calculate(price, percentage_tip, diners):
+    """Calculate the tip in dollars, total price and price per diner
+
+    price(float)
+    percentage_tip(integer)
+    diners(integer)
+
+    return a json
+
+    """
+
+    return jsonify(tip_in_dollars=get_tip_in_dollars(price, percentage_tip),
+                    total_price=get_total_price(price, percentage_tip),
+                    price_per_diner=get_price_per_diner(price, percentage_tip, diners))
 
 
 #----------------------------------------------------------------------------#

@@ -5,14 +5,15 @@
 {% block content %}
 
     <form action="/get-tip-info" method="POST">
-        What restaurant did you mean?
+        <p>What restaurant did you mean?</p>  
         <br>
         <br>
         <select name="restaurant">
-            
+            <option>Select your restaurant:</option>
             {% for restaurant in restaurants_in_db %}
-                
-                <option value="{{ restaurant['yelp_restaurant_id'] }}|{{ restaurant['name'].capitalize() }}" > {{ restaurant['name'].capitalize() }} ({{ restaurant['address'] }}) </option> 
+            <option value="{{ restaurant['yelp_restaurant_id'] }}|{{ restaurant['name'].capitalize() }}|{{ restaurant['zipcode'] }}">
+                {{ restaurant['name'].capitalize() }} ({{ restaurant['address'] }}) 
+            </option> 
                 
             {% endfor %}
             
