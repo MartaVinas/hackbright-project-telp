@@ -6,22 +6,36 @@
     
     <div>
         <h1>Tip Information</h1>
-        <ul>
-            {% if average_tip_lunch and average_tip_dinner %}
-            Restaurant {{ restaurant_name }}
-                <li>Lunch average tip: {{ average_tip_lunch }} %</li>
-                <li>Dinner average tip: {{ average_tip_dinner }} %</li>
+        <ul><!-- if user search by restaurant -->
+            {% if restaurant_name %}
+                Restaurant {{ restaurant_name }}
+                {% if average_tip_lunch and average_tip_dinner %}
+                    <li>Lunch average tip: {{ average_tip_lunch }} %</li>
+                    <li>Dinner average tip: {{ average_tip_dinner }} %</li>
             
-            {% elif average_tip_lunch %}
-            Restaurant {{ restaurant_name }}
-                <li>Lunch average tip: {{ average_tip_lunch }} %</li>
+                {% elif average_tip_lunch %}
+                    <li>Lunch average tip: {{ average_tip_lunch }} %</li>
             
-            {% elif average_tip_dinner %}
-            Restaurant {{ restaurant_name }}
-                <li>Lunch average tip: {{ average_tip_dinner }} %</li>
+                {% elif average_tip_dinner %}
+                    <li>Lunch average tip: {{ average_tip_dinner }} %</li>
             
-            {% else %}
-                <li>Sorry, there is no average information for restaurant {{ restaurant_name }}. Put your price and the tip and be the first one to contribute!</li>
+                {% else %}
+                    <li>Sorry, there is no average information for restaurant {{ restaurant_name }}. Put your price and the tip and be the first one to contribute!</li>
+                {% endif %}
+            {% endif %}
+            <!-- if user search by zipcode -->
+            {% if zipcode %}
+                Zipcode {{ zipcode }}
+                {% if average_tip_lunch and average_tip_dinner %}
+                    <li>Lunch average tip: {{ average_tip_lunch }} %</li>
+                    <li>Dinner average tip: {{ average_tip_dinner }} %</li>
+            
+                {% elif average_tip_lunch %}
+                    <li>Lunch average tip: {{ average_tip_lunch }} %</li>
+            
+                {% elif average_tip_dinner %}
+                    <li>Lunch average tip: {{ average_tip_dinner }} %</li>
+                {% endif %}
             {% endif %}
         </ul> 
     </div>
@@ -29,8 +43,10 @@
     <div>
         <h1>Tip Calculator</h1>
         <form action="/new-meal" id="meal" method="POST">
-            <input type="hidden" name="restaurant_id" id="restaurant-id-field" value="{{ restaurant_id }}">
-            <input type="hidden" name="restaurant_zipcode" id="restaurant-zipcode-field" value="{{ restaurant_zipcode }}">
+            {% if restaurant_name %} <!-- only if user search by restaurant -->
+                <input type="hidden" name="restaurant_id" id="restaurant-id-field" value="{{ restaurant_id }}">
+                <input type="hidden" name="restaurant_zipcode" id="restaurant-zipcode-field" value="{{ restaurant_zipcode }}">
+            {% endif %}
             Price(*): $ <input type="number" min="0" step="0.01" name="price" id="price-field" required>
             <br>
             Tip(*): % <input type="number" min="0" name="percentage_tip" id="percentage-tip-field" required>

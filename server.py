@@ -15,8 +15,7 @@ app = Flask(__name__)
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
 
-# Normally, if you use an undefined variable in Jinja2, it fails silently.
-# This is horrible. Fix this so that, instead, it raises an error.
+# It raises an error if you use an undefined variable in Jinja2
 app.jinja_env.undefined = StrictUndefined
 
 
@@ -112,6 +111,60 @@ def is_restaurant_in_db(restaurant):
     return False
 
 
+@app.route('/search-zipcode', methods=['GET'])
+def search_zipcode():
+    """Search the user zipcode in telp_db."""
+
+    # get zipcode from the user
+    zipcode = request.args.get("zipcode")
+
+    # search zipcode in telp_db
+    zipcode_in_db = db.session.query(Meal).\
+                                filter_by(zipcode=zipcode).all()
+
+    if not zipcode_in_db:
+        # if there is no zipcode in telp_db, show a message
+        flash("There is no information for zipcode {zipcode}.".format(zipcode=zipcode))
+        
+        return redirect("/")
+   
+    else:
+        # get average tip by zipcode and meal type
+        average_tip_lunch = get_average_tip_by_zipcode(zipcode, 'lunch')
+        
+        average_tip_dinner = get_average_tip_by_zipcode(zipcode, 'dinner')
+        
+        return render_template("tip-info-calc.html",
+                                restaurant_name=None,
+                                zipcode=zipcode,
+                                average_tip_lunch=average_tip_lunch,
+                                average_tip_dinner=average_tip_dinner)
+
+
+def get_average_tip_by_zipcode(zipcode, meal_type):
+    """Query to telp_db to get the average tip by zipcode and meal_type
+
+    zipcode(string)
+    meal_type(string)
+
+    return a float or NONE
+    """
+
+    average_tip = db.session.query(func.round(func.avg(Meal.percentage_tip), 2)).\
+                    group_by(Meal.meal_type).\
+                    having(Meal.meal_type=='{type}'.format(type=meal_type)).\
+                    filter(Meal.zipcode==zipcode).\
+                    first()
+
+    if average_tip:
+        # unpack the tupla (Decimal('20.67'),) and get the number
+        average_tip_value, = average_tip
+        
+        return average_tip_value
+ 
+    return None
+
+
 @app.route('/get-tip-info', methods=['POST'])
 def get_average_tip():
     """Get average tip info from telp_db"""
@@ -129,7 +182,8 @@ def get_average_tip():
                             restaurant_name=restaurant_name,
                             restaurant_zipcode=restaurant_zipcode,
                             average_tip_lunch=average_tip_lunch, 
-                            average_tip_dinner=average_tip_dinner)
+                            average_tip_dinner=average_tip_dinner,
+                            zipcode=None)
 
 
 def get_average_tip_by_restaurant(restaurant, meal_type):
@@ -149,7 +203,7 @@ def get_average_tip_by_restaurant(restaurant, meal_type):
                     first()
 
     if average_tip:
-        # unpack the tupla (Decimal('20.67'),) and get the number
+        # unpack the tuple (Decimal('20.67'),) and get the number
         average_tip_value, = average_tip
         
         return average_tip_value
@@ -170,16 +224,20 @@ def add_meal_and_calculate():
 
     diners = int(request.form.get("diners"))
 
-    # add a new meal in telp_db
-    new_meal = Meal(yelp_restaurant_id=request.form.get("restaurant_id"),
+    restaurant_id=request.form.get("restaurant_id")
+
+    # when user search by zipcode, there is no restaurant
+    # when user search by restaurant, it is added a new meal in telp_db
+    if restaurant_id:
+        new_meal = Meal(yelp_restaurant_id=restaurant_id,
                     zipcode=request.form.get("restaurant_zipcode"),
                     meal_type=request.form.get("meal_type"),
                     price=price,
                     percentage_tip=percentage_tip)
 
-    db.session.add(new_meal)
+        db.session.add(new_meal)
 
-    db.session.commit()
+        db.session.commit()
 
     return calculate(price, percentage_tip, diners)
 
