@@ -28,19 +28,19 @@
 
     <div>
         <h1>Tip Calculator</h1>
-        <form action="/new-meal" name="meal" method="POST">
+        <form action="/new-meal" id="meal" method="POST">
             <input type="hidden" name="restaurant_id" id="restaurant-id-field" value="{{ restaurant_id }}">
             <input type="hidden" name="restaurant_zipcode" id="restaurant-zipcode-field" value="{{ restaurant_zipcode }}">
-            Price: $ <input type="text" name="price" id="price-field">
+            Price(*): $ <input type="number" min="0" step="0.01" name="price" id="price-field" required>
             <br>
-            Tip: <input type="text" name="percentage_tip" id="percentage-tip-field"> %
+            Tip(*): % <input type="number" min="0" name="percentage_tip" id="percentage-tip-field" required>
             <br>
-            # Diners: <input type="text" name="diners" id="diners-field">
+            # Diners: <input type="number" min="0" name="diners" id="diners-field" value=1>
             <br>
-            <select name="meal_type" id="meal-type-field" required>
-                <option>Select your meal type:</option>
-                <option value="dinner" > Dinner </option>
-                <option value="lunch" > Lunch </option>    
+            Meal type (*): <select name="meal_type" id="meal-type-field" required>   
+                <option disabled selected value>Select your meal type:</option>
+                <option value="dinner"> Dinner </option>
+                <option value="lunch"> Lunch </option>    
             </select>
             <input type="submit" id="calculate" value="Calculate">
             <br>
@@ -52,7 +52,7 @@
             <br>
         </form>
     </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
     <script src="/static/js/telp.js"></script>
     
 {% endblock %}

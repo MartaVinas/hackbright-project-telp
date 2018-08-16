@@ -149,9 +149,9 @@ def get_average_tip_by_restaurant(restaurant, meal_type):
                     first()
 
     if average_tip:
-        # parse tupla (Decimal('20.67'),) to 20.67
-        #return average_tip[0]
+        # unpack the tupla (Decimal('20.67'),) and get the number
         average_tip_value, = average_tip
+        
         return average_tip_value
  
     return None
@@ -163,7 +163,7 @@ def add_meal_and_calculate():
 
     return a json with tip in dollars, total price and price per diner
     """
-    
+
     price = float(request.form.get("price"))
 
     percentage_tip = int(request.form.get("percentage_tip"))

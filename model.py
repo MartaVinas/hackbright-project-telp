@@ -40,7 +40,7 @@ class Meal(db.Model):
                          primary_key=True)
     yelp_restaurant_id = db.Column(db.String(100), db.ForeignKey('restaurants.yelp_restaurant_id'), nullable=False)
     zipcode = db.Column(db.String(20), nullable=False)
-    meal_type = db.Column(db.String(20), nullable=True)
+    meal_type = db.Column(db.String(20), nullable=False)
     price = db.Column(db.Float, nullable = False)
     percentage_tip = db.Column(db.Integer, nullable = False)
     date = db.Column(db.Date)

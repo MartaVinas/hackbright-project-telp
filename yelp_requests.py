@@ -1,6 +1,7 @@
 """Functions to search restaurants in YELP API"""
 
 import os
+
 import requests
 
 
