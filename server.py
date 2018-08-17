@@ -1,5 +1,7 @@
 """Routes for TELP project."""
 
+from datetime import datetime
+
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
@@ -233,7 +235,8 @@ def add_meal_and_calculate():
                     zipcode=request.form.get("restaurant_zipcode"),
                     meal_type=request.form.get("meal_type"),
                     price=price,
-                    percentage_tip=percentage_tip)
+                    percentage_tip=percentage_tip,
+                    date=datetime.now())
 
         db.session.add(new_meal)
 

@@ -43,7 +43,7 @@ class Meal(db.Model):
     meal_type = db.Column(db.String(20), nullable=False)
     price = db.Column(db.Float, nullable = False)
     percentage_tip = db.Column(db.Integer, nullable = False)
-    date = db.Column(db.Date)
+    date = db.Column(db.DateTime)
 
     # Define relationship to restaurant
     restaurant = db.relationship("Restaurant",
