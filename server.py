@@ -49,11 +49,13 @@ def search_restaurant():
             add_restaurants_to_db(restaurants_in_yelp)
         
         else:
-            flash("The restaurant {name} doesn't exist in YELP!"
-                " You could search average tip information by zipcode.".format(name=restaurant_name))
+            flash("We don't have data for {name}!"
+                " You can search average tip information by zipcode.".format(name=restaurant_name))
             return redirect("/")
 
-    return render_template("confirm-restaurant.html", restaurants_in_db=restaurants_in_db)
+    return render_template("confirm-restaurant.html", 
+                            restaurants_in_db=restaurants_in_db,
+                            restaurant_name=restaurant_name)
 
 
 def create_restaurants_list_from_restaurant_json(restaurants):
@@ -126,7 +128,7 @@ def search_zipcode():
 
     if not zipcode_in_db:
         # if there is no zipcode in telp_db, show a message
-        flash("There is no information for zipcode {zipcode}.".format(zipcode=zipcode))
+        flash("There is no information for {zipcode}.".format(zipcode=zipcode))
         
         return redirect("/")
    
@@ -220,7 +222,7 @@ def add_meal_and_calculate():
     return a json with tip in dollars, total price and price per diner
     """
 
-    price = float(request.form.get("price"))
+    price = round(float(request.form.get("price")),2)
 
     percentage_tip = int(request.form.get("percentage_tip"))
 

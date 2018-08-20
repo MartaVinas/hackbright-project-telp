@@ -20,18 +20,26 @@ function submitMeal(evt) {
     $('#meal').find('input, select').each(function(){
         
         let required = $(this).prop('required');
-        let there_is_value = $(this).val();
+        let value = $(this).val();
 
         let proceed = true;
         // if they are required and there is no value show an alert
         if(required){
-            if(!there_is_value){
+            if(!value){
                 proceed = false;
                 alert($(this).attr('name') + " is required");
             } else {
                 proceed = true;
             }
         }
+
+        // if they are negative show an alert
+        // if(value < 0){
+        //     proceed = false;
+        //     alert($(this).attr('name') + " is required");
+        // } else {
+        //     proceed = true;
+        // }
 
         if(proceed){
             // get the information from the browser

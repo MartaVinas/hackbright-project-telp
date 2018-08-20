@@ -9,16 +9,24 @@
         <br>
         <select name="restaurant" required>
             <option disabled selected value>Select your restaurant:</option>
+            
             {% for restaurant in restaurants_in_db %}
+
             <option value="{{ restaurant['yelp_restaurant_id'] }}|{{ restaurant['name'].capitalize() }}|{{ restaurant['zipcode'] }}">
                 {{ restaurant['name'].capitalize() }} ({{ restaurant['address'] }}) 
             </option> 
                 
             {% endfor %}
-            
         </select>
-        <input type="submit" value="Go">
+
+        <input type="submit" value="Go">  
     </form>
     <br>
+<!-- 
+    <form action="/search-again" method="POST">
+        <input type="hidden" name="restaurant_not_found" value= "{{ restaurant_name }}">
+        <input type="hidden" name="found" value= "True">
+        <input type="submit" value="It is no here. Search again">  
+    </form> -->
 
 {% endblock %}
