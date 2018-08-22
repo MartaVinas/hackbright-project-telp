@@ -9,8 +9,8 @@
 
         <ul><!-- if user search by restaurant -->
             {% if restaurant_name %}
-                Restaurant {{ restaurant_name }}
-
+                <p>Restaurant {{ restaurant_name }} ({{ restaurant_address }})</p> 
+                
                 {% if average_tip_lunch %}
                     <li>Lunch average tip: {{ average_tip_lunch }} %</li>
                 {% endif %}
@@ -27,8 +27,8 @@
 
             <!-- if user search by zipcode -->
             {% if zipcode %}
-                Zipcode {{ zipcode }}
-            
+                <p>Zipcode {{ zipcode }}</p>
+        
                 {% if average_tip_lunch %}
                     <li>Lunch average tip: {{ average_tip_lunch }} %</li>
                 {% endif %}
@@ -38,49 +38,119 @@
                 {% endif %}
 
             {% endif %}
-        </ul> 
+        </ul>
     </div>
 
     <div>
         <h1>Tip Calculator</h1>
 
-        <form action="/new-meal" id="meal" method="POST">
+        <ul><form action="/new-meal" id="meal" method="POST">
 
             {% if restaurant_name %} <!-- only if user search by restaurant -->
                 <input type="hidden" name="restaurant_id" id="restaurant-id-field" value="{{ restaurant_id }}">
                 <input type="hidden" name="restaurant_zipcode" id="restaurant-zipcode-field" value="{{ restaurant_zipcode }}">
             {% endif %}
 
-            Price(*): $ <input type="number" min="0" step="0.01" maxlength="6" name="price" id="price-field" required>
-            <br>
+            <p> Price(*): $ <input type="number" min="0" step="0.01" maxlength="6" name="price" id="price-field" required></p>
 
-            Tip(*): <input type="number" min="0" maxlength="2" name="percentage_tip" id="percentage-tip-field" required> %
-            <br>
+            <p> Tip(*): <input type="number" min="0" maxlength="2" name="percentage_tip" id="percentage-tip-field" required> %</p>
 
-            # Diners: <input type="number" min="0" maxlength="2" name="diners" id="diners-field" value=1>
-            <br>
+            <p> # Diners: <input type="number" min="0" maxlength="2" name="diners" id="diners-field" value=1></p>
 
-            Meal type(*): <select name="meal_type" id="meal-type-field" required>   
+            <p> Meal type(*): <select name="meal_type" id="meal-type-field" required>   
                 <option disabled selected value>Select your meal type:</option>
                 <option value="dinner"> Dinner </option>
                 <option value="lunch"> Lunch </option>    
-            </select>
+            </select></p>
 
             <input type="submit" id="calculate" value="Calculate">
-            <br>
 
-            Tip: $ <span id="tip_in_dollars">__________</span>
-            <br>
+            <p> Tip: $ <span id="tip_in_dollars">__________</span></p>
 
-            Total price: $ <span id="total_price">__________</span>
-            <br>
+            <p> Total price: $ <span id="total_price">__________</span></p>
 
-            Total price/diner: $ <span id="price_per_diner">__________</span>
-            <br>
+            <p> Total price/diner: $ <span id="price_per_diner">__________</span></p>
 
-        </form>
+        </form></ul>
+
     </div>
 
     <script src="/static/js/telp.js"></script>
+
+    {% if restaurant_name %} <!-- only if user search by restaurant -->
     
+        <div id="map"></div>
+    
+        <script>
+
+            let restaurantAddress = "{{ restaurant_address }} {{ restaurant_zipcode }}";
+
+            function initMap(){
+
+                geocoder = new google.maps.Geocoder();
+
+                let request = geocoder.geocode( { 'address': restaurantAddress}, 
+                    function(results, status){
+                        if (status === 'OK') {
+                        
+                            // add marker
+                            let marker = new google.maps.Marker({
+                                position: results[0].geometry.location,
+                                map: new google.maps.Map(document.getElementById('map'), {
+                                    center: results[0].geometry.location,
+                                    zoom: 15.5
+                                }),
+                                title:'restaurant'
+                            });
+
+                        } else {
+                            alert('Restaurant not found');
+                        }
+                    });
+            }
+        </script>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9lK9Pui9zGLPbkUrlqWv_eXZ9U4dr0QA&callback=initMap" async defer></script>
+    {% endif %}
+
+    {% if zipcode %} <!-- only if user search by zipcode -->
+    
+        <div id="map"></div>
+    
+        <script>
+
+            let sanFrancisco = {lat: 37.7749, lng: -122.4313};
+
+            function initMap(){
+
+            let map = new google.maps.Map(document.getElementById('map'), {
+                center: sanFrancisco,
+                zoom: 12
+            });
+
+            let layer = new google.maps.FusionTablesLayer({
+                query: {
+                    select: 'geometry',
+                    from: '1gLK5O8DPWYlHBzxKx71RNJ9lpbOZt2pk-Hx_ApdD'
+                },
+                styles: [{
+                    polygonOptions: {
+                        fillColor: '#C70039',
+                        fillOpacity: 0.2
+                    }
+                },{
+                    where: 'ZIP = {{ zipcode }} ',
+                    polygonOptions: {
+                        fillOpacity: 0.4
+                    }
+                }]
+            });
+
+            layer.setMap(map);
+        }
+        </script>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9lK9Pui9zGLPbkUrlqWv_eXZ9U4dr0QA&callback=initMap" async defer></script>
+    {% endif %}
+
 {% endblock %}

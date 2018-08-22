@@ -139,10 +139,10 @@ def search_zipcode():
         average_tip_dinner = get_average_tip_by_zipcode(zipcode, 'dinner')
         
         return render_template("tip-info-calc.html",
-                                restaurant_name=None,
                                 zipcode=zipcode,
                                 average_tip_lunch=average_tip_lunch,
-                                average_tip_dinner=average_tip_dinner)
+                                average_tip_dinner=average_tip_dinner,
+                                restaurant_name=None)
 
 
 def get_average_tip_by_zipcode(zipcode, meal_type):
@@ -174,7 +174,7 @@ def get_average_tip():
     """Get average tip info from telp_db"""
 
     # get restaurant from the user
-    restaurant_yelp_id, restaurant_name, restaurant_zipcode = request.form.get("restaurant").split("|")
+    restaurant_yelp_id, restaurant_name, restaurant_zipcode, restaurant_address = request.form.get("restaurant").split("|")
     
     # get average tip from telp_db by restaurant and meal type
     average_tip_lunch = get_average_tip_by_restaurant(restaurant_yelp_id, 'lunch')
@@ -187,6 +187,7 @@ def get_average_tip():
                             restaurant_zipcode=restaurant_zipcode,
                             average_tip_lunch=average_tip_lunch, 
                             average_tip_dinner=average_tip_dinner,
+                            restaurant_address=restaurant_address,
                             zipcode=None)
 
 
