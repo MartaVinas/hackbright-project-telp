@@ -49,6 +49,7 @@
             {% if restaurant_name %} <!-- only if user search by restaurant -->
                 <input type="hidden" name="restaurant_id" id="restaurant-id-field" value="{{ restaurant_id }}">
                 <input type="hidden" name="restaurant_zipcode" id="restaurant-zipcode-field" value="{{ restaurant_zipcode }}">
+                <input type="hidden" name="restaurant_address" id="restaurant-address-field" value="{{ restaurant_address }}">
             {% endif %}
 
             <p> Price(*): $ <input type="number" min="0" step="0.01" maxlength="6" name="price" id="price-field" required></p>
@@ -77,80 +78,21 @@
 
     <script src="/static/js/telp.js"></script>
 
+    <div id="map"></div>
+
     {% if restaurant_name %} <!-- only if user search by restaurant -->
-    
-        <div id="map"></div>
-    
-        <script>
+        
+        <script src="/static/js/map-restaurant.js"></script>
 
-            let restaurantAddress = "{{ restaurant_address }} {{ restaurant_zipcode }}";
-
-            function initMap(){
-
-                geocoder = new google.maps.Geocoder();
-
-                let request = geocoder.geocode( { 'address': restaurantAddress}, 
-                    function(results, status){
-                        if (status === 'OK') {
-                        
-                            // add marker
-                            let marker = new google.maps.Marker({
-                                position: results[0].geometry.location,
-                                map: new google.maps.Map(document.getElementById('map'), {
-                                    center: results[0].geometry.location,
-                                    zoom: 15.5
-                                }),
-                                title:'restaurant'
-                            });
-
-                        } else {
-                            alert('Restaurant not found');
-                        }
-                    });
-            }
-        </script>
-
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9lK9Pui9zGLPbkUrlqWv_eXZ9U4dr0QA&callback=initMap" async defer></script>
     {% endif %}
 
     {% if zipcode %} <!-- only if user search by zipcode -->
-    
-        <div id="map"></div>
-    
-        <script>
 
-            let sanFrancisco = {lat: 37.7749, lng: -122.4313};
+        <input type="hidden" name="zipcode" id="zipcode-field" value="{{ zipcode }}">
+        <script src="/static/js/map-zipcode.js"></script>
 
-            function initMap(){
-
-            let map = new google.maps.Map(document.getElementById('map'), {
-                center: sanFrancisco,
-                zoom: 12
-            });
-
-            let layer = new google.maps.FusionTablesLayer({
-                query: {
-                    select: 'geometry',
-                    from: '1gLK5O8DPWYlHBzxKx71RNJ9lpbOZt2pk-Hx_ApdD'
-                },
-                styles: [{
-                    polygonOptions: {
-                        fillColor: '#C70039',
-                        fillOpacity: 0.2
-                    }
-                },{
-                    where: 'ZIP = {{ zipcode }} ',
-                    polygonOptions: {
-                        fillOpacity: 0.4
-                    }
-                }]
-            });
-
-            layer.setMap(map);
-        }
-        </script>
-
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9lK9Pui9zGLPbkUrlqWv_eXZ9U4dr0QA&callback=initMap" async defer></script>
     {% endif %}
+
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=initMap" async defer></script>
 
 {% endblock %}

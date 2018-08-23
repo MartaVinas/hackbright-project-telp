@@ -1,5 +1,7 @@
 """Routes for TELP project."""
 
+import os
+
 from datetime import datetime
 
 from jinja2 import StrictUndefined
@@ -137,11 +139,15 @@ def search_zipcode():
         average_tip_lunch = get_average_tip_by_zipcode(zipcode, 'lunch')
         
         average_tip_dinner = get_average_tip_by_zipcode(zipcode, 'dinner')
+
+        # get the google api key stored in secrets.sh from os
+        google_api_key = os.environ['GOOGLE_API_KEY']
         
         return render_template("tip-info-calc.html",
                                 zipcode=zipcode,
                                 average_tip_lunch=average_tip_lunch,
                                 average_tip_dinner=average_tip_dinner,
+                                google_api_key=google_api_key,
                                 restaurant_name=None)
 
 
@@ -181,6 +187,9 @@ def get_average_tip():
 
     average_tip_dinner = get_average_tip_by_restaurant(restaurant_yelp_id, 'dinner')
 
+    # get the google api key stored in secrets.sh from os
+    google_api_key = os.environ['GOOGLE_API_KEY']
+
     return render_template("tip-info-calc.html",
                             restaurant_id=restaurant_yelp_id,
                             restaurant_name=restaurant_name,
@@ -188,6 +197,7 @@ def get_average_tip():
                             average_tip_lunch=average_tip_lunch, 
                             average_tip_dinner=average_tip_dinner,
                             restaurant_address=restaurant_address,
+                            google_api_key=google_api_key,
                             zipcode=None)
 
 

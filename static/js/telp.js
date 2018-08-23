@@ -20,13 +20,12 @@ function submitMeal(evt) {
     $('#meal').find('input, select').each(function(){
         
         let required = $(this).prop('required');
-        let value = parseFloat($(this).val());
+        let value = $(this).val();
         console.log("info value and type", value, typeof(value))
 
         let proceed = true;
         // if they are required and there is no value show an alert
-
-        // TODO: Parse string into float
+        
         if(required){
             if(!value){
                 proceed = false;
@@ -35,7 +34,8 @@ function submitMeal(evt) {
                 proceed = true;
             }
         }
-
+        // TODO: Parse string into float
+        // I am checking all but I only follow the last one, which is proceed true
         //if they are negative show an alert
         if(value < 0){
             proceed = false;
@@ -54,7 +54,9 @@ function submitMeal(evt) {
                 "diners": $("#diners-field").val(),
                 "meal_type": $("#meal-type-field").val(),
             };
-        }       
+        } else {
+
+        }      
     });
     // pass formInputs to /new-meal and call showResults
     $.post("/new-meal", formInputs, showResults);  
