@@ -12,9 +12,9 @@
             
             {% for restaurant in restaurants_in_db %}
 
-            <option value="{{ restaurant['yelp_restaurant_id'] }}|{{ restaurant['name'].capitalize() }}|{{ restaurant['zipcode'] }}|{{ restaurant['address'] }}">
-                {{ restaurant['name'].capitalize() }} ({{ restaurant['address'] }}) 
-            </option> 
+                <option value="{{ restaurant['yelp_restaurant_id'] }}|{{ restaurant['name'].capitalize() }}|{{ restaurant['zipcode'] }}|{{ restaurant['address'] }}">
+                    {{ restaurant['name'].capitalize() }} ({{ restaurant['address'] }}) 
+                </option> 
                 
             {% endfor %}
         </select>

@@ -1,4 +1,4 @@
-"""Routes for TELP project."""
+"""Routes and helper functions for TELP project."""
 
 import os
 
@@ -21,6 +21,9 @@ app.secret_key = "ABC"
 
 # It raises an error if you use an undefined variable in Jinja2
 app.jinja_env.undefined = StrictUndefined
+
+################################################################################
+# Routes #
 
 
 @app.route('/')
@@ -60,63 +63,6 @@ def search_restaurant():
                             restaurant_name=restaurant_name)
 
 
-def create_restaurants_list_from_restaurant_json(restaurants):
-    """Create restaurants list from YELP restaurants.
-
-    restaurants(json)
-
-    return list of restaurants
-    """
-
-    restaurants_list = []
-    
-    for restaurant in restaurants['businesses']:
-
-        new_restaurant = Restaurant(yelp_restaurant_id=restaurant['id'],
-                                    name=restaurant['name'].lower(),
-                                    address=restaurant['location']['address1'],
-                                    zipcode=restaurant['location']['zip_code'],
-                                    rating=restaurant['rating'])
-
-        restaurants_list.append(new_restaurant)
-
-    return restaurants_list
-
-
-def add_restaurants_to_db(restaurants):
-    """Store restaurants from YELP into telp_db.
-
-    restaurants(json)
-    """
-    new_restaurants = create_restaurants_list_from_restaurant_json(restaurants)
-    
-    for restaurant in new_restaurants:
-
-        if not is_restaurant_in_db(restaurant):
-
-            db.session.add(restaurant)
-
-    db.session.commit()
-
-
-def is_restaurant_in_db(restaurant):
-    """Check if restaurant given is in telp_db.
-
-    restaurant(list)
-
-    Return True if already exist or False if not.
-    """
-
-    restaurant_in_db = db.session.query(Restaurant).\
-                                filter(Restaurant.yelp_restaurant_id == restaurant.yelp_restaurant_id).\
-                                all()
-
-    if restaurant_in_db:
-        return True
-
-    return False
-
-
 @app.route('/search-zipcode', methods=['GET'])
 def search_zipcode():
     """Search the user zipcode in telp_db."""
@@ -151,30 +97,6 @@ def search_zipcode():
                                 restaurant_name=None)
 
 
-def get_average_tip_by_zipcode(zipcode, meal_type):
-    """Query to telp_db to get the average tip by zipcode and meal_type
-
-    zipcode(string)
-    meal_type(string)
-
-    return a float or NONE
-    """
-
-    average_tip = db.session.query(func.round(func.avg(Meal.percentage_tip), 2)).\
-                    group_by(Meal.meal_type).\
-                    having(Meal.meal_type=='{type}'.format(type=meal_type)).\
-                    filter(Meal.zipcode==zipcode).\
-                    first()
-
-    if average_tip:
-        # unpack the tupla (Decimal('20.67'),) and get the number
-        average_tip_value, = average_tip
-        
-        return average_tip_value
- 
-    return None
-
-
 @app.route('/get-tip-info', methods=['POST'])
 def get_average_tip():
     """Get average tip info from telp_db"""
@@ -199,31 +121,6 @@ def get_average_tip():
                             restaurant_address=restaurant_address,
                             google_api_key=google_api_key,
                             zipcode=None)
-
-
-def get_average_tip_by_restaurant(restaurant, meal_type):
-    """Query to telp_db to get the average tip by restaurant and meal_type
-
-    restaurant(string)
-    meal_type(string)
-
-    return a float or NONE
-    """
-
-    average_tip = db.session.query(func.round(func.avg(Meal.percentage_tip), 2)).\
-                    join(Restaurant).\
-                    group_by(Meal.yelp_restaurant_id, Meal.meal_type).\
-                    having(Meal.meal_type=='{type}'.format(type=meal_type)).\
-                    filter(Restaurant.yelp_restaurant_id==restaurant).\
-                    first()
-
-    if average_tip:
-        # unpack the tuple (Decimal('20.67'),) and get the number
-        average_tip_value, = average_tip
-        
-        return average_tip_value
- 
-    return None
 
 
 @app.route("/new-meal", methods=['POST'])
@@ -256,6 +153,113 @@ def add_meal_and_calculate():
         db.session.commit()
 
     return calculate(price, percentage_tip, diners)
+
+
+################################################################################
+# Helper functions #
+
+
+def create_restaurants_list_from_restaurant_json(restaurants):
+    """Create restaurants list from YELP restaurants.
+
+    restaurants(json)
+
+    return list of restaurants
+    """
+
+    restaurants_list = []
+    
+    for restaurant in restaurants['businesses']:
+
+        new_restaurant = Restaurant(yelp_restaurant_id=restaurant['id'],
+                                    name=restaurant['name'].lower(),
+                                    address=restaurant['location']['address1'],
+                                    zipcode=restaurant['location']['zip_code'],
+                                    rating=restaurant['rating'])
+
+        restaurants_list.append(new_restaurant)
+
+    return restaurants_list
+
+
+def add_restaurants_to_db(restaurants):
+    """Store restaurants from YELP into telp_db.
+
+    restaurants(json)
+    """
+
+    new_restaurants = create_restaurants_list_from_restaurant_json(restaurants)
+    
+    for restaurant in new_restaurants:
+
+        if not is_restaurant_in_db(restaurant):
+
+            db.session.add(restaurant)
+
+    db.session.commit()
+
+
+def is_restaurant_in_db(restaurant):
+    """Check if restaurant given is in telp_db.
+
+    restaurant(list)
+
+    Return True if already exist or False if not.
+    """
+
+    restaurant_in_db = db.session.query(Restaurant).\
+                                filter(Restaurant.yelp_restaurant_id == restaurant.yelp_restaurant_id).\
+                                all()
+
+    if restaurant_in_db:
+        return True
+
+    return False
+
+
+def get_average_tip_by_zipcode(zipcode, meal_type):
+    """Query to telp_db to get the average tip by zipcode and meal_type
+
+    zipcode(string)
+    meal_type(string)
+
+    return a float or NONE
+    """
+
+    average_tip = db.session.query(func.round(func.avg(Meal.percentage_tip), 2)).\
+                    group_by(Meal.meal_type).\
+                    having(Meal.meal_type=='{type}'.format(type=meal_type)).\
+                    filter(Meal.zipcode==zipcode).\
+                    first()
+
+    if average_tip:
+        # unpack the tupla (Decimal('20.67'),) and get the number
+        average_tip_value, = average_tip
+        
+        return average_tip_value
+
+
+def get_average_tip_by_restaurant(restaurant, meal_type):
+    """Query to telp_db to get the average tip by restaurant and meal_type
+
+    restaurant(string)
+    meal_type(string)
+
+    return a float or NONE
+    """
+
+    average_tip = db.session.query(func.round(func.avg(Meal.percentage_tip), 2)).\
+                    join(Restaurant).\
+                    group_by(Meal.yelp_restaurant_id, Meal.meal_type).\
+                    having(Meal.meal_type=='{type}'.format(type=meal_type)).\
+                    filter(Restaurant.yelp_restaurant_id==restaurant).\
+                    first()
+
+    if average_tip:
+        # unpack the tuple (Decimal('20.67'),) and get the number
+        average_tip_value, = average_tip
+        
+        return average_tip_value
 
 
 def calculate(price, percentage_tip, diners):

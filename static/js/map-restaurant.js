@@ -4,6 +4,7 @@
 
 "use strict";
 
+
 let restaurantAddress = $("#restaurant-address-field").val() + " " + $("#restaurant-zipcode-field").val();
 
 function initMap(){

@@ -4,8 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-#####################################################################
-# Model definitions
+################################################################################
+# Model definitions #
 
 class Restaurant(db.Model):
     """Restaurant"""

@@ -4,6 +4,7 @@
 
 "use strict";
 
+
 let sanFrancisco = {lat: 37.7749, lng: -122.4313};
 
 let zipcode = $("#zipcode-field").val()

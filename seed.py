@@ -18,15 +18,26 @@ from server import app
 
     # db.session.commit()
 
+#def get_meals():
+"""Load meals into database."""
+
+    #meal = Restaurant(yelp_restaurant_id=,
+    #                 zipcode=,
+    #                 meal_type=,
+    #                 price=,
+    #                 percentage_tip=,
+    #                 date=)
+
+    # db.session.add(meal)
+
+    # db.session.commit()
+
 #---------------------------------------------------------------------#
 
 if __name__ == '__main__':
     connect_to_db(app)
     db.create_all()
 
-    # new_rest = Restaurant(yelp_restaurant_id='rest', name='cafe', address='Sutton', zipcode='94118', rating=4.5)
-
-    # db.session.add(new_rest)
-    # db.session.commit()
-
     #get_restaurants()
+
+    #get_meals()
