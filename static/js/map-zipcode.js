@@ -24,12 +24,14 @@ function initMap(){
         styles: [{
             polygonOptions: {
                 fillColor: '#C70039',
-                fillOpacity: 0.2
+                fillOpacity: 0.1,
+                strokeColor: '#cccccc'
             }
         },{
             where: 'ZIP = ' + zipcode + ' ',
             polygonOptions: {
-                fillOpacity: 0.4
+                fillOpacity: 0.2,
+                strokeColor: '#eeeeee'
             }
         }]
     });

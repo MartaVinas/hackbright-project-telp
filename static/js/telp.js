@@ -18,7 +18,7 @@ function submitMeal(evt) {
     
     let formInputs;
     let requirementsOK = checkRequirements();
-
+    
     // if all requirements are OK, get the information from the browser
     if(requirementsOK){
         formInputs = {
@@ -30,7 +30,7 @@ function submitMeal(evt) {
             "meal_type": $("#meal-type-field").val(),
         };
         // pass formInputs to /new-meal and call showResults
-        $.post("/new-meal", formInputs, showResults); 
+        $.post("/new-meal", formInputs, showResults);
     } 
 }
 
