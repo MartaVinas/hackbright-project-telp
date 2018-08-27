@@ -51,6 +51,7 @@ def search_restaurant():
         if restaurants_in_yelp['total'] != 0:
             # get a list of restaurants and add restaurants into telp_db
             restaurants_in_db = create_restaurants_list_from_restaurant_json(restaurants_in_yelp)
+            
             add_restaurants_to_db(restaurants_in_yelp)
         
         else:

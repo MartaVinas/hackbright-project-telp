@@ -81,7 +81,7 @@ def search_restaurants(city = "San Francisco"):
 
     limit =50
 
-    num_requests = 3
+    num_requests = 2
 
     offset = 0
 
