@@ -1,4 +1,4 @@
-"""Load restaurant data into database."""
+"""Load restaurant data into database. Create fake meals in database"""
 
 import random
 from datetime import datetime

@@ -37,7 +37,7 @@ def homepage():
 def search_restaurant():
     """Search the user restaurant in telp_db."""
 
-    # get restaurant name from the user
+    # get restaurant name from homepage.html search_restaurant form
     restaurant_name = request.args.get("restaurant_name")
 
     # search restaurant in telp_db and get all restaurants objects with that name
@@ -67,8 +67,8 @@ def search_restaurant():
 @app.route('/search-zipcode', methods=['GET'])
 def search_zipcode():
     """Search the user zipcode in telp_db."""
-
-    # get zipcode from the user
+    
+    # get zipcode from homepage.html search_zipcode form
     zipcode = request.args.get("zipcode")
 
     # search zipcode in telp_db
@@ -90,7 +90,7 @@ def search_zipcode():
         # get the google api key stored in secrets.sh from os
         google_api_key = os.environ['GOOGLE_API_KEY']
         
-        return render_template("tip-info-calc.html",
+        return render_template("telp.html",
                                 zipcode=zipcode,
                                 average_tip_lunch=average_tip_lunch,
                                 average_tip_dinner=average_tip_dinner,
@@ -101,9 +101,22 @@ def search_zipcode():
 @app.route('/get-tip-info', methods=['POST'])
 def get_average_tip():
     """Get average tip info from telp_db"""
+    print("fisrt form----------", request.form.get("restaurant"))
+    print("second form---------", request.form.get("possible-restaurants"))
+    restaurant_first_search = request.form.get("restaurant")
+    
+    restaurant_second_search = request.form.get("possible-restaurants")
+    
+    restaurant_choosen = ""
+    
+    if restaurant_first_search is not None:
+        restaurant_choosen = restaurant_first_search
 
-    # get restaurant from the user
-    restaurant_yelp_id, restaurant_name, restaurant_zipcode, restaurant_address = request.form.get("restaurant").split("|")
+    if restaurant_second_search is not None:
+        restaurant_choosen = restaurant_second_search
+
+    # get restaurant from confirm-restaurant.html show_restaurants form
+    restaurant_yelp_id, restaurant_name, restaurant_zipcode, restaurant_address = restaurant_choosen.split("|")
     
     # get average tip from telp_db by restaurant and meal type
     average_tip_lunch = get_average_tip_by_restaurant(restaurant_yelp_id, 'lunch')
@@ -113,7 +126,7 @@ def get_average_tip():
     # get the google api key stored in secrets.sh from os
     google_api_key = os.environ['GOOGLE_API_KEY']
 
-    return render_template("tip-info-calc.html",
+    return render_template("telp.html",
                             restaurant_id=restaurant_yelp_id,
                             restaurant_name=restaurant_name,
                             restaurant_zipcode=restaurant_zipcode,
@@ -124,6 +137,24 @@ def get_average_tip():
                             zipcode=None)
 
 
+@app.route('/search-again', methods=['POST'])
+def search_again():
+    """Search restaurant by name in YELP
+
+    return a json with all the restaurants
+    """
+
+    # get information from confirmRestaurant.js function searchAgain restaurant_name
+    restaurant_name = request.form.get("name_restaurant_not_found")
+
+    restaurants = search_restaurants_by_name(restaurant_name)
+
+    # add restaurants into telp_db      
+    add_restaurants_to_db(restaurants)
+    
+    return jsonify(restaurants['businesses'])
+
+
 @app.route("/new-meal", methods=['POST'])
 def add_meal_and_calculate():
     """Add a meal to telp_db
@@ -131,6 +162,7 @@ def add_meal_and_calculate():
     return a json with tip in dollars, total price and price per diner
     """
 
+    # get information from telp.js function submitMeal formInputs
     price = round(float(request.form.get("price")),2)
 
     percentage_tip = int(request.form.get("percentage_tip"))

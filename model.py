@@ -85,9 +85,9 @@ class Admin(db.Model):
 #####################################################################
 # Helper functions
 
-#DB_URI = 'postgresql:///telp_test'
-DB_URI = 'postgresql:///telp_test_fake_data'
-#DB_URI = 'postgresql:///telp'
+DB_URI = 'postgresql:///telp_test'
+# DB_URI = 'postgresql:///telp_test_fake_data'
+# DB_URI = 'postgresql:///telp'
 
 def connect_to_db(app):
     """Connect the database to Flask app."""
