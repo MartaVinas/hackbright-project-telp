@@ -27,6 +27,16 @@ function showResults(results){
 
         $("#possible-restaurants").prepend(restaurant_option);
     }
+
+    let separator = "<option disabled selected value>-----------------------------------------</option>"
+    
+    $("#possible-restaurants").prepend(separator);
+
+    let first_option = "<option disabled selected value>Is now your restaurant here? Select it:</option>"
+    
+    $("#possible-restaurants").prepend(first_option);
+
+
 }
 
 let count = 0;
@@ -35,6 +45,8 @@ function searchAgain(evt) {
     evt.preventDefault();
 
     count = count + 1;
+
+    $('#show_more_restaurants').removeAttr('hidden');
 
     // get the restaurant name from confirm-restaurant.html restaurant_not_found form
     let name_and_counter = {

@@ -5,9 +5,11 @@
 {% block content %}
 
     <form name="show_restaurants" action="/get-tip-info" method="POST">
+        
         <p>What restaurant did you mean?</p>  
         
         <select name="restaurant" required>
+            
             <option disabled selected value>Select your restaurant:</option>
             
             {% for restaurant in restaurants_in_db %}
@@ -18,26 +20,29 @@
                 
             {% endfor %}
         </select>
+        
+        <input type="submit" value="Go">
 
-        <input type="submit" value="Go">  
     </form>
     <br>
 
-    <form name="restaurant_not_found" action="/search-again" method="POST">
+    <form name="restaurant_not_found" action="/search-again" method="POST"> 
+        
         <input type="hidden" name="restaurant_not_found" id="restaurant-not-found-field" value="{{ restaurant_name }}">
         
-        <input type="submit" name="notFound" id="notFound-button" value="It is no here. Search again">
+        <input type="submit" name="notFound" id="notFound-button" value="It is no here -> Search again">
 
     </form>
     <br>
 
-    <form action="/get-tip-info" method="POST">
+    <form hidden id="show_more_restaurants" action="/get-tip-info" method="POST">
         
         <select name="possible-restaurants" id="possible-restaurants" required>
-            <option disabled selected value>Select your restaurant:</option>
+            
         </select>
 
         <input type="submit" value="Go">
+
     </form>
 
     <!-- control the searching for new restaurants -->
