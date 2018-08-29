@@ -6,7 +6,7 @@
 
 
 function showResults(results){ 
-    // get the results from /new-meal and set it into the browser elements
+    // get the results from /new-meal and set it into the browser elements(telp.html)
     $("#tip_in_dollars").html(results["tip_in_dollars"]);
     $("#total_price").html(results["total_price"]);
     $("#price_per_diner").html(results["price_per_diner"]);
@@ -19,7 +19,7 @@ function submitMeal(evt) {
     let formInputs;
     let requirementsOK = checkRequirements();
     
-    // if all requirements are OK, get the information from the browser
+    // if all requirements are OK, get the information from telp.html meal form
     if(requirementsOK){
         formInputs = {
             "restaurant_id": $("#restaurant-id-field").val(),
@@ -43,7 +43,8 @@ function checkRequirements(){
 
     let requirementsOK = true;
 
-    // find 'inputs' and 'selects' from the meal form and check for requirements
+    // find 'inputs' and 'selects' from telp.html meal form
+    // and check for requirements
     $('#meal').find('input, select').each(function(){
         
         let value = $(this).val();

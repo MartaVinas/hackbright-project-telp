@@ -53,6 +53,35 @@ def search_restaurants_by_name(name, city = "San Francisco"):
     return call_yelp_api(url)
 
 
+def search_restaurants_by_name_paginate(name, offset, city = "San Francisco"):
+    """Search restaurant by name and city in YELP API,
+    the search in YELP is not precise, so normally there are more than one
+    restaurant in the response.
+
+    name(string)
+    offset(integer)
+    city(string) San Francisco by default
+
+    Return json or NONE. Structure of json:
+
+    {'businesses':[
+                    {'id': value, 'name': value, 'rating': value,
+                    'location': {'address1': value, 'zip_code': value}
+                    },
+                    {other restaurant}
+                    ...
+                ]
+    'total': value
+    'region': value
+    }
+
+    """
+
+    url = "https://api.yelp.com/v3/businesses/search?categories=restaurants,bars,coffee&term={name}&location={city}&offset={offset}".format(name=name, city=city, offset=offset)
+    
+    return call_yelp_api(url)
+
+
 def search_restaurants(city = "San Francisco"):
     """Search restaurants by city in YELP API
 

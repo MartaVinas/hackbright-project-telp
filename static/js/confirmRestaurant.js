@@ -16,36 +16,34 @@ function showResults(results){
     for (let restaurant of restaurants) {
         
         let id = restaurant['id'];
-        console.log(id)
+      
         let rest_name = restaurant['name'];
-        console.log(rest_name)
 
         let zipcode = restaurant['location']['zip_code'];
-        console.log(zipcode)
 
         let address = restaurant['location']['address1'];
-        console.log(address)
 
         let restaurant_option = strOrigin.concat(id, pip, rest_name, pip, zipcode, pip, address, strFinal) + rest_name + "(" + address + ")</option>";
-        console.log(restaurant_option)
 
-        $("#possible-restaurants").append(restaurant_option);
+        $("#possible-restaurants").prepend(restaurant_option);
     }
 }
 
+let count = 0;
 
 function searchAgain(evt) {
     evt.preventDefault();
 
-    // get the restaurant name from the browser
-    let restaurant_name = {
-        "name_restaurant_not_found": $("#restaurant-not-found-field").val()
+    count = count + 1;
+
+    // get the restaurant name from confirm-restaurant.html restaurant_not_found form
+    let name_and_counter = {
+        "name_restaurant_not_found": $("#restaurant-not-found-field").val(),
+        "counter": count
     }
     
-    console.log("name", restaurant_name)
-
-    // pass restaurant_name to /search-again and call showResults
-    $.post("/search-again", restaurant_name, showResults);
+    // pass name_and_counter to /search-again and call showResults
+    $.post("/search-again", name_and_counter, showResults);
 }
 
 

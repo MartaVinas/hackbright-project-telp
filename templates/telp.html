@@ -45,7 +45,7 @@
     <div>
         <h1>Tip Calculator</h1>
 
-        <ul><form action="/new-meal" id="meal" method="POST">
+        <ul><form name="meal" action="/new-meal" id="meal" method="POST">
 
             {% if restaurant_name %} <!-- only if user search by restaurant -->
                 <input type="hidden" name="restaurant_id" id="restaurant-id-field" value="{{ restaurant_id }}">

@@ -10,7 +10,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy import func
 
 from model import Restaurant, Meal, Admin, connect_to_db, db
-from yelp_requests import search_restaurants_by_name, search_restaurants
+from yelp_requests import search_restaurants_by_name, search_restaurants, search_restaurants_by_name_paginate
 from tip_calculator import get_tip_in_dollars, get_total_price, get_price_per_diner
 
 
@@ -101,8 +101,7 @@ def search_zipcode():
 @app.route('/get-tip-info', methods=['POST'])
 def get_average_tip():
     """Get average tip info from telp_db"""
-    print("fisrt form----------", request.form.get("restaurant"))
-    print("second form---------", request.form.get("possible-restaurants"))
+
     restaurant_first_search = request.form.get("restaurant")
     
     restaurant_second_search = request.form.get("possible-restaurants")
@@ -144,10 +143,20 @@ def search_again():
     return a json with all the restaurants
     """
 
-    # get information from confirmRestaurant.js function searchAgain restaurant_name
+    # get information from confirmRestaurant.js function searchAgain name_and_counter
     restaurant_name = request.form.get("name_restaurant_not_found")
 
-    restaurants = search_restaurants_by_name(restaurant_name)
+    num_of_clicks = int(request.form.get("counter"))
+
+    limit = 20
+    offset = 0
+
+    if num_of_clicks == 2:
+        offset = limit
+    elif num_of_clicks > 2:
+        offset = num_of_clicks * limit
+
+    restaurants = search_restaurants_by_name_paginate(restaurant_name, offset)
 
     # add restaurants into telp_db      
     add_restaurants_to_db(restaurants)
