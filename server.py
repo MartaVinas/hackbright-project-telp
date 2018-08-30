@@ -98,6 +98,15 @@ def search_zipcode():
                                 restaurant_name=None)
 
 
+@app.route('/tip-calculator', methods=['GET'])
+def tip_calculator():
+    """Shortcut to go straight to tip calculator"""
+
+    return render_template("telp.html",
+                            zipcode=None,
+                            restaurant_name=None)
+
+
 @app.route('/get-tip-info', methods=['POST'])
 def get_average_tip():
     """Get average tip info from telp_db"""

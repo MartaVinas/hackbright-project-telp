@@ -5,10 +5,9 @@
 {% block content %}
     <!-- show average info -->
     <div>
-        <h1>Tip Data</h1>
-
         <ul><!-- if user search by restaurant -->
             {% if restaurant_name %}
+            <h1>Tip Data</h1>
                 <p>Restaurant {{ restaurant_name }} ({{ restaurant_address }})</p> 
                 
                 {% if average_tip_lunch %}
@@ -27,6 +26,7 @@
 
             <!-- if user search by zipcode -->
             {% if zipcode %}
+            <h1>Tip Data</h1>
                 <p>Zipcode {{ zipcode }}</p>
         
                 {% if average_tip_lunch %}
@@ -67,12 +67,16 @@
             </select></p>
 
             <input type="submit" id="calculate" value="Calculate">
+            <br>
+            
+            <div hidden id="results">
+                <p> Tip: $ <span id="tip_in_dollars"></span></p>
 
-            <p> Tip: $ <span id="tip_in_dollars">__________</span></p>
+                <p> Total price: $ <span id="total_price"></span></p>
 
-            <p> Total price: $ <span id="total_price">__________</span></p>
-
-            <p> Total price/diner: $ <span id="price_per_diner">__________</span></p>
+                <p> Total price/diner: $ <span id="price_per_diner"></span></p>
+            
+            </div>
 
         </form></ul>
 
@@ -97,7 +101,11 @@
 
     {% endif %}
 
-    <!-- request to Google API  -->
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=initMap" async defer></script>
+    {% if restaurant_name or zipcode %}
+        
+        <!-- request to Google API  -->
+        <script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=initMap" async defer></script>
+
+    {% endif %}
 
 {% endblock %}

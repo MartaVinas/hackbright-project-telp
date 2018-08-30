@@ -3,23 +3,32 @@
 {% block title %}Homepage{% endblock %}
 
 {% block content %}
-
-    <h1>TELP</h1>
-
-    <p>Introduce the restaurant name or the zipcode and it will show the average tip and a tip-calculator to help you out.</p>
-
-    <form name="search_restaurant" action="/search-restaurant" method="GET">
-        Restaurant name: 
-        <input type="text" name="restaurant_name" required="False">
-        <input type="submit" name="search" value="Search by Restaurant">
-    </form>
+    
+    <div class="text-center">
+        <img src="/static/img/header.jpg" class="rounded" alt="Responsive image">
+    </div>
     <br>
 
-    <form name="search_zipcode" action="/search-zipcode" method="GET">
-        Zipcode: 
-        <input type="text" name="zipcode" required="False">
-        <input type="submit" name="search" value="Search by Zipcode">
-    </form>
-    <br>
+    <div class="text-center">
+        
+        <form name="search_restaurant" action="/search-restaurant" method="GET">
+            Restaurant name: 
+            <input type="text" name="restaurant_name" required="False">
+            <input type="submit" name="search" value="Search by Restaurant">
+        </form>
+        <br>
 
+        <form name="search_zipcode" action="/search-zipcode" method="GET">
+            Zipcode: 
+            <input type="text" name="zipcode" required="False">
+            <input type="submit" name="search" value="Search by Zipcode">
+        </form>
+        <br>
+
+        <p>Introduce the restaurant name or the zipcode and it will show the average tip and a tip-calculator to help you out.</p>
+
+    </div>
+
+    <a href="/tip-calculator">Take me directly to the Tip Calculator</a>
+    
 {% endblock %}

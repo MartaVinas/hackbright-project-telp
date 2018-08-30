@@ -15,6 +15,8 @@ function showResults(results){
 
 function submitMeal(evt) {
     evt.preventDefault();
+
+    $('#results').removeAttr('hidden');
     
     let formInputs;
     let requirementsOK = checkRequirements();
