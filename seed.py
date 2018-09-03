@@ -17,6 +17,25 @@ def get_restaurants():
     for json_restaurants in jsons_restaurants_list:
         add_restaurants_to_db(json_restaurants)
 
+def get_fake_restaurants():
+    """Create 2 fake restaurants to check if those restaurants are not in Yelp"""
+    
+    fake_rest1 = Restaurant(yelp_restaurant_id='111111aaaaaa',
+                            name='Rest fake 1',
+                            address='nowhere',
+                            zipcode='94118',
+                            rating=4)
+    fake_rest2 = Restaurant(yelp_restaurant_id='222222bbbbbb',
+                            name='Rest fake 2',
+                            address='far away',
+                            zipcode='94118',
+                            rating=5)
+    
+    db.session.add_all([fake_rest1, fake_rest2])
+    
+    db.session.commit()
+
+
 def get_meals():
     """Load fake meals into database."""
 
@@ -38,13 +57,24 @@ def get_meals():
         percentatge_tip = create_tip_from_rating(rating)
 
         meal = Meal(yelp_restaurant_id=restaurant_id,
-                        zipcode=zipcode,
-                        meal_type=meal_type,
-                        price=price,
-                        percentage_tip=percentatge_tip,
-                        date=datetime.now())
+                    zipcode=zipcode,
+                    meal_type=meal_type,
+                    price=price,
+                    percentage_tip=percentatge_tip,
+                    date=datetime.now())
 
         db.session.add(meal)
+
+    db.session.commit()
+
+
+def get_admin():
+    """Load admin into database."""
+
+    admin = Admin(username="marta",
+                password=1234)
+
+    db.session.add(admin)
 
     db.session.commit()
 
@@ -81,4 +111,8 @@ if __name__ == '__main__':
 
     get_restaurants()
 
+    get_fake_restaurants()
+
     get_meals()
+
+    get_admin()

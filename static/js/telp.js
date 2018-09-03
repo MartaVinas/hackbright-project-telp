@@ -20,7 +20,7 @@ function submitMeal(evt) {
     
     let formInputs;
     let requirementsOK = checkRequirements();
-    
+  
     // if all requirements are OK, get the information from telp.html meal form
     if(requirementsOK){
         formInputs = {
@@ -29,8 +29,9 @@ function submitMeal(evt) {
             "price": parseFloat($("#price-field").val()).toFixed(2),
             "percentage_tip": parseInt($("#percentage-tip-field").val()),
             "diners": parseInt($("#diners-field").val()),
-            "meal_type": $("#meal-type-field").val(),
+            "meal_type": getMealType(),
         };
+
         // pass formInputs to /new-meal and call showResults
         $.post("/new-meal", formInputs, showResults);
     } 
@@ -101,4 +102,20 @@ function checkRequirements(){
     });
 
     return requirementsOK;
+}
+
+
+function getMealType(){
+
+    let meal_type;
+
+    if(document.getElementById('lunch-field').checked) {
+        // lunch radio button has been selected
+        meal_type = $("#lunch-field").val();
+    }else if(document.getElementById('dinner-field').checked) {
+        // dinner radio button has been selected
+        meal_type = $("#dinner-field").val();
+    }
+
+    return meal_type;
 }

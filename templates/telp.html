@@ -43,9 +43,10 @@
 
     <!-- show tip calculator -->
     <div>
-        <h1>Tip Calculator</h1>
+        <ul>
+            <h1>Tip Calculator</h1>
 
-        <ul><form name="meal" action="/new-meal" id="meal" method="POST">
+            <form name="meal" action="/new-meal" id="meal" method="POST">
 
             {% if restaurant_name %} <!-- only if user search by restaurant -->
                 <input type="hidden" name="restaurant_id" id="restaurant-id-field" value="{{ restaurant_id }}">
@@ -58,13 +59,10 @@
             <p> Tip(*): <input type="number" min="0" step="1" maxlength="3" name="percentage_tip" id="percentage-tip-field" required> %</p>
 
             <p> # Diners: <input type="number" min="1" step="1" maxlength="3" name="diners" id="diners-field" value=1></p>
-
-            <p> Meal type(*): <select name="meal_type" id="meal-type-field" required>   
-                <option disabled selected value>Select your meal type:</option>
-                <option value="dinner"> Dinner </option>
-                <option value="lunch"> Lunch </option>
-
-            </select></p>
+            <p> Meal type(*):
+                <input type="radio" name="meal_type" id="lunch-field" value="lunch"> Lunch
+                <input type="radio" name="meal_type" id="dinner-field" value="dinner" checked> Dinner
+            </p>
 
             <input type="submit" id="calculate" value="Calculate">
             <br>
@@ -75,11 +73,8 @@
                 <p> Total price: $ <span id="total_price"></span></p>
 
                 <p> Total price/diner: $ <span id="price_per_diner"></span></p>
-            
             </div>
-
         </form></ul>
-
     </div>
 
     <!-- control the tip calculator -->

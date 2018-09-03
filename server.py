@@ -7,10 +7,10 @@ from datetime import datetime
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-from sqlalchemy import func
+from sqlalchemy import func, update
 
 from model import Restaurant, Meal, Admin, connect_to_db, db
-from yelp_requests import search_restaurants_by_name, search_restaurants, search_restaurants_by_name_paginate
+from yelp_requests import search_restaurants_by_name, search_restaurants, search_restaurants_by_name_paginate, search_restaurants_by_id
 from tip_calculator import get_tip_in_dollars, get_total_price, get_price_per_diner
 
 
@@ -167,7 +167,6 @@ def search_again():
 
     restaurants = search_restaurants_by_name_paginate(restaurant_name, offset)
 
-    # add restaurants into telp_db      
     add_restaurants_to_db(restaurants)
     
     return jsonify(restaurants['businesses'])
@@ -204,6 +203,97 @@ def add_meal_and_calculate():
         db.session.commit()
 
     return calculate(price, percentage_tip, diners)
+
+
+@app.route('/login', methods=['GET'])
+def login_form():
+    """Show login form."""
+
+    return render_template("login-form.html")
+
+
+@app.route('/login', methods=['POST'])
+def login_process():
+    """Process login."""
+
+    # Get form variables
+    username = request.form["username"]
+    password = request.form["password"]
+
+    admin = Admin.query.filter_by(username=username).first()
+
+    if not admin:
+        flash("Incorrect username")
+        return redirect("/login")
+
+    if admin.password != password:
+        flash("Incorrect password")
+        return redirect("/login")
+
+    session["admin_id"] = admin.admin_id
+
+    flash("Logged in")
+    return render_template("admin.html", username=username)
+
+
+@app.route('/delete', methods=['GET'])
+def delete_restaurants():
+    """Delete from telp db restaurants that there are not in Yelp"""
+
+    restaurant_deleted_counter = 0
+
+    # Search all restaurant ids in telp_db
+    restaurants_in_db = db.session.query(Restaurant.yelp_restaurant_id).all()
+
+    #restaurants_in_db is a list of tuples with the id in position 0 of each tuple
+    for restaurant in restaurants_in_db:
+        id_restaurant, = restaurant
+
+        # Search all the restaurants in YELP by id
+        restaurant_in_Yelp = search_restaurants_by_id(id_restaurant)
+
+        # If there is no restaurant in YELP, delete from telp_db
+        if restaurant_in_Yelp is None:
+            print("rest to delete", Restaurant.query.get(id_restaurant))
+            
+            db.session.delete(Restaurant.query.get(id_restaurant))
+
+            db.session.commit()
+
+            restaurant_deleted_counter += 1
+    
+    return str(restaurant_deleted_counter)
+
+
+@app.route('/change-pwd', methods=['POST'])
+def change_pwd():
+    """Change the admin's password in telp_db."""
+
+    new_pwd = request.form.get("new_pwd")
+
+    admin_id = session["admin_id"]
+
+    r = Admin.query.filter_by(admin_id=admin_id).update(dict(password=new_pwd))
+    print("What is 'r', the number of changes or 1 if it successes and 0 if it fails--------------", r, type(r))
+    db.session.commit()
+
+    return str(r)
+
+
+@app.route('/statistics')
+def show_statistics():
+    """Show some statistics to the admin."""
+
+    return render_template("working.html")
+
+
+@app.route('/logout')
+def logout():
+    """Log out."""
+
+    del session["admin_id"]
+    flash("Logged Out.")
+    return redirect("/")
 
 
 ################################################################################

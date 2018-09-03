@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block content %}
+
+    <h1>Welcome Admin {{ username }}</h1>
+    <div>
+        <p>What do you want to do:</p>
+        
+        <p>> Update - delete restaurants from database there aren't in YELP anymore <br>(<i>Are you sure? That feature takes a long time</i>)
+            <input type="button" id="delete" value="Update">
+            <span id="restaurants-deleted"></span>
+        </p>
+        
+
+        <p>> Change your password
+            <input type="button" id="change-pwd" value="Change pwd">
+        </p>
+        <form hidden id="change-pwd-form" action="/change-pwd" method="POST">
+            <label>New password:
+                <input type="password" name="new_password" id="pwd-field" required>
+            </label>
+            <input type="submit" id="update-pwd" value="Update pwd">
+            <span id="pwd-changed"></span>
+        </form>
+
+        <span id="pwd-changed"></span>
+
+        <p>> <a href="/statistics">See statistics</a></p>
+
+        <p>> <a href="/logout">Log Out</a></p>
+
+    </div>
+
+    <!-- control admin functions -->
+    <script src="/static/js/admin.js"></script>
+
+{% endblock %}

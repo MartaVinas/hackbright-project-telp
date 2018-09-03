@@ -38,7 +38,10 @@ class Meal(db.Model):
     meal_id = db.Column(db.Integer,
                          autoincrement=True,
                          primary_key=True)
-    yelp_restaurant_id = db.Column(db.String(100), db.ForeignKey('restaurants.yelp_restaurant_id'), nullable=False)
+    yelp_restaurant_id = db.Column(db.String(100), 
+                        db.ForeignKey('restaurants.yelp_restaurant_id', 
+                                        ondelete='CASCADE'), 
+                        nullable=False)
     zipcode = db.Column(db.String(20), nullable=False)
     meal_type = db.Column(db.String(20), nullable=False)
     price = db.Column(db.Float, nullable = False)
@@ -47,7 +50,9 @@ class Meal(db.Model):
 
     # Define relationship to restaurant
     restaurant = db.relationship("Restaurant",
-                           backref=db.backref("meals", order_by=meal_id))
+                                backref=db.backref("meals", 
+                                                    order_by=meal_id,
+                                                    passive_deletes=True))
 
     def __repr__(self):
         """Provide helpful representation when printed."""

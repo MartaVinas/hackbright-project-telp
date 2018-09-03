@@ -108,7 +108,7 @@ def search_restaurants(city = "San Francisco"):
 
     restaurants = []
 
-    limit =50
+    limit =20
 
     num_requests = 2
 
@@ -130,4 +130,20 @@ def search_restaurants(city = "San Francisco"):
         i += 1
 
     return restaurants
+
+
+def search_restaurants_by_id(id_restaurant):
+    """Search restaurant by id
+
+    id_restaurant(string)
+
+    Return json or NONE.
+
+    """
+
+    url = "https://api.yelp.com/v3/businesses/{id}".format(id=id_restaurant)
+    
+    return call_yelp_api(url)
+
+
     
