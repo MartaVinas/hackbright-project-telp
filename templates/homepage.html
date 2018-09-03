@@ -4,8 +4,36 @@
 
 {% block content %}
     
+    <!-- Nav bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        
+        <a class="navbar-brand" href="#"><img src="/static/img/logo.png" width="60" height="30" alt=""></a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarText">
+            
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/"> Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/tip-calculator"> Tip Calculator </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login"> Admin </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <br>
+
+
+     <!-- Header image -->
     <div class="text-center">
-        <img src="/static/img/header.jpg" class="rounded" alt="Responsive image">
+        <img src="/static/img/header.png" class="img-fluid,rounded" alt="Responsive image">
     </div>
     <br>
 
@@ -28,10 +56,5 @@
         <p>Introduce the restaurant name or the zipcode and it will show the average tip and a tip-calculator to help you out.</p>
 
     </div>
-
-    <a href="/tip-calculator">Take me directly to the Tip Calculator</a>
-    <br>
-    
-    <a href="/login">Admin</a>
-    
+  
 {% endblock %}

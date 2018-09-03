@@ -19,11 +19,11 @@
     
     <body>
         {% block content %}BODY CONTENT GOES HERE{% endblock %}
-        <ul>
             {% for message in get_flashed_messages() %}
-                <li>{{ message }}</li>
+                <div class="alert alert-dark" role="alert">
+                    {{ message }}
+                </div>
             {% endfor %}
-        </ul>
 
         <!-- Bootstrap: Popper.js, Bootstrap JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

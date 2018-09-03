@@ -3,13 +3,39 @@
 {% block title %}telp{% endblock %}
 
 {% block content %}
-    <!-- show average info -->
-    <div>
+
+    <!-- Nav bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        
+        <a class="navbar-brand" href="#"><img src="/static/img/logo.png" width="60" height="30" alt=""></a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarText">
+            
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/"> Home </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/tip-calculator"> Tip Calculator </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login"> Admin </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <br>
+
+    <!-- Show average info -->
+    <div class="col-12 col-md-3 order-md-2">
         <ul><!-- if user search by restaurant -->
             {% if restaurant_name %}
-            <h1>Tip Data</h1>
-                <p>Restaurant {{ restaurant_name }} ({{ restaurant_address }})</p> 
-                
+            <h1>Restaurant {{ restaurant_name }} ({{ restaurant_address }})</h1>
+
                 {% if average_tip_lunch %}
                     <li>Lunch average tip: {{ average_tip_lunch }} %</li>
                 {% endif %}
@@ -26,8 +52,7 @@
 
             <!-- if user search by zipcode -->
             {% if zipcode %}
-            <h1>Tip Data</h1>
-                <p>Zipcode {{ zipcode }}</p>
+            <h1>Zipcode {{ zipcode }}</h1>
         
                 {% if average_tip_lunch %}
                     <li>Lunch average tip: {{ average_tip_lunch }} %</li>
@@ -42,7 +67,7 @@
     </div>
 
     <!-- show tip calculator -->
-    <div>
+    <div class="col-12 col-md-3 order-md-2">
         <ul>
             <h1>Tip Calculator</h1>
 

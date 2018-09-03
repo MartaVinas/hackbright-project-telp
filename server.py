@@ -7,7 +7,8 @@ from datetime import datetime
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-from sqlalchemy import func, update
+from sqlalchemy import func
+# from sqlalchemy import func, update
 
 from model import Restaurant, Meal, Admin, connect_to_db, db
 from yelp_requests import search_restaurants_by_name, search_restaurants, search_restaurants_by_name_paginate, search_restaurants_by_id
@@ -254,7 +255,6 @@ def delete_restaurants():
 
         # If there is no restaurant in YELP, delete from telp_db
         if restaurant_in_Yelp is None:
-            print("rest to delete", Restaurant.query.get(id_restaurant))
             
             db.session.delete(Restaurant.query.get(id_restaurant))
 
@@ -273,18 +273,15 @@ def change_pwd():
 
     admin_id = session["admin_id"]
 
-    r = Admin.query.filter_by(admin_id=admin_id).update(dict(password=new_pwd))
-    print("What is 'r', the number of changes or 1 if it successes and 0 if it fails--------------", r, type(r))
-    db.session.commit()
+    result = 0
+    try:
+        Admin.query.filter_by(admin_id=admin_id).update(dict(password=new_pwd))
+        db.session.commit()
+        result = 1
+    except:
+        pass
 
-    return str(r)
-
-
-@app.route('/statistics')
-def show_statistics():
-    """Show some statistics to the admin."""
-
-    return render_template("working.html")
+    return str(result)
 
 
 @app.route('/logout')
