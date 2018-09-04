@@ -23,15 +23,15 @@ function initMap(){
         },
         styles: [{
             polygonOptions: {
-                fillColor: '#C70039',
-                fillOpacity: 0.1,
-                strokeColor: '#cccccc'
+                fillColor: '#cccccc',
+                fillOpacity: 0.2,
+                strokeColor: '#eeeeee'
             }
         },{
             where: 'ZIP = ' + zipcode + ' ',
             polygonOptions: {
-                fillOpacity: 0.2,
-                strokeColor: '#eeeeee'
+                fillColor: '#e06666',
+                fillOpacity: 0.2
             }
         }]
     });

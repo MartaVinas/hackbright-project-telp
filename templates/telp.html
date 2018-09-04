@@ -30,102 +30,110 @@
     </nav>
     <br>
 
-    <!-- Show average info -->
-    <div class="col-12 col-md-3 order-md-2">
-        <ul><!-- if user search by restaurant -->
-            {% if restaurant_name %}
-            <h1>Restaurant {{ restaurant_name }} ({{ restaurant_address }})</h1>
+    <!-- Average info, tip Calculator and map -->
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-6">
+                <!-- Show average info -->
+                <ul>
+                <!-- if user search by restaurant -->
+                {% if restaurant_name %} 
+                    <h4>Restaurant {{ restaurant_name }} ({{ restaurant_address }})</h4>
 
-                {% if average_tip_lunch %}
-                    <li>Lunch average tip: {{ average_tip_lunch }} %</li>
+                    {% if average_tip_lunch %}
+                        <li>Lunch average tip: {{ average_tip_lunch }} %</li>
+                    {% endif %}
+
+                    {% if average_tip_dinner %}
+                        <li>Dinner average tip: {{ average_tip_dinner }} %</li>
+                    {% endif %}
+
+                    {% if not average_tip_dinner and not average_tip_lunch %}
+                        <li>Sorry, there is no average information for restaurant {{ restaurant_name }}. Put your price and the tip and be the first one to contribute!</li>
+                    {% endif %}
+
                 {% endif %}
 
-                {% if average_tip_dinner %}
-                    <li>Dinner average tip: {{ average_tip_dinner }} %</li>
-                {% endif %}
-
-                {% if not average_tip_dinner and not average_tip_lunch %}
-                    <li>Sorry, there is no average information for restaurant {{ restaurant_name }}. Put your price and the tip and be the first one to contribute!</li>
-                {% endif %}
-
-            {% endif %}
-
-            <!-- if user search by zipcode -->
-            {% if zipcode %}
-            <h1>Zipcode {{ zipcode }}</h1>
+                <!-- if user search by zipcode -->
+                {% if zipcode %} 
+                    <h2>Zipcode {{ zipcode }}</h2>
         
-                {% if average_tip_lunch %}
-                    <li>Lunch average tip: {{ average_tip_lunch }} %</li>
-                {% endif %}
+                    {% if average_tip_lunch %}
+                        <li>Lunch average tip: {{ average_tip_lunch }} %</li>
+                    {% endif %}
                 
-                {% if average_tip_dinner %}
-                    <li>Dinner average tip: {{ average_tip_dinner }} %</li>
+                    {% if average_tip_dinner %}
+                        <li>Dinner average tip: {{ average_tip_dinner }} %</li>
+                    {% endif %}
+
                 {% endif %}
+                </ul>
 
-            {% endif %}
-        </ul>
-    </div>
+                <!-- show tip calculator -->
+                <ul>
+                    <h3>Tip Calculator</h3>
+                    <form name="meal" action="/new-meal" id="meal" method="POST">
 
-    <!-- show tip calculator -->
-    <div class="col-12 col-md-3 order-md-2">
-        <ul>
-            <h1>Tip Calculator</h1>
+                    <!-- only if user search by restaurant -->
+                    {% if restaurant_name %} 
+                        <input type="hidden" name="restaurant_id" id="restaurant-id-field" value="{{ restaurant_id }}">
+                        <input type="hidden" name="restaurant_zipcode" id="restaurant-zipcode-field" value="{{ restaurant_zipcode }}">
+                        <input type="hidden" name="restaurant_address" id="restaurant-address-field" value="{{ restaurant_address }}">
+                    {% endif %}
 
-            <form name="meal" action="/new-meal" id="meal" method="POST">
+                        <p> Price(*): $ <input type="number" min="0" step="0.01" maxlength="6" name="price" id="price-field" required></p>
 
-            {% if restaurant_name %} <!-- only if user search by restaurant -->
-                <input type="hidden" name="restaurant_id" id="restaurant-id-field" value="{{ restaurant_id }}">
-                <input type="hidden" name="restaurant_zipcode" id="restaurant-zipcode-field" value="{{ restaurant_zipcode }}">
-                <input type="hidden" name="restaurant_address" id="restaurant-address-field" value="{{ restaurant_address }}">
-            {% endif %}
+                        <p> Tip(*): <input type="number" min="0" step="1" maxlength="3" name="percentage_tip" id="percentage-tip-field" required> %</p>
 
-            <p> Price(*): $ <input type="number" min="0" step="0.01" maxlength="6" name="price" id="price-field" required></p>
+                        <p> # Diners: <input type="number" min="1" step="1" maxlength="3" name="diners" id="diners-field" value=1></p>
+                        <p> Meal type(*):
+                            <input type="radio" name="meal_type" id="lunch-field" value="lunch"> Lunch
+                            <input type="radio" name="meal_type" id="dinner-field" value="dinner" checked> Dinner
+                        </p>
 
-            <p> Tip(*): <input type="number" min="0" step="1" maxlength="3" name="percentage_tip" id="percentage-tip-field" required> %</p>
-
-            <p> # Diners: <input type="number" min="1" step="1" maxlength="3" name="diners" id="diners-field" value=1></p>
-            <p> Meal type(*):
-                <input type="radio" name="meal_type" id="lunch-field" value="lunch"> Lunch
-                <input type="radio" name="meal_type" id="dinner-field" value="dinner" checked> Dinner
-            </p>
-
-            <input type="submit" id="calculate" value="Calculate">
-            <br>
+                        <input type="submit" id="calculate" value="Calculate">
+                        <br>
+                        <br>
             
-            <div hidden id="results">
-                <p> Tip: $ <span id="tip_in_dollars"></span></p>
+                        <div hidden id="results">
+                            <p> Tip: $ <span id="tip_in_dollars"></span></p>
 
-                <p> Total price: $ <span id="total_price"></span></p>
+                            <p> Total price: $ <span id="total_price"></span></p>
 
-                <p> Total price/diner: $ <span id="price_per_diner"></span></p>
+                            <p> Total price/diner: $ <span id="price_per_diner"></span></p>
+                        </div>
+                    </form>
+                </ul>
             </div>
-        </form></ul>
+
+            <!-- show the map -->
+            <div class="col-12 col-md-6 col-lg-6" id="map"></div>   
+        </div>
     </div>
 
-    <!-- control the tip calculator -->
+    <!-- control the tip calculator -->  
     <script src="/static/js/telp.js"></script>
 
-    <!-- show the map -->
-    <div id="map"></div>
-
-    {% if restaurant_name %} <!-- only if user search by restaurant -->
+    <!-- only if user search by restaurant -->
+    {% if restaurant_name %}
         
         <script src="/static/js/map-restaurant.js"></script>
 
     {% endif %}
 
-    {% if zipcode %} <!-- only if user search by zipcode -->
+    <!-- only if user search by zipcode -->
+    {% if zipcode %} 
 
         <input type="hidden" name="zipcode" id="zipcode-field" value="{{ zipcode }}">
         <script src="/static/js/map-zipcode.js"></script>
 
     {% endif %}
 
+    <!-- make Google API request if there is a restaurant o zipcode -->
     {% if restaurant_name or zipcode %}
         
-        <!-- request to Google API  -->
         <script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=initMap" async defer></script>
-
+      
     {% endif %}
 
 {% endblock %}

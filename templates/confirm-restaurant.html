@@ -30,46 +30,62 @@
     </nav>
     <br>
 
-    <form name="show_restaurants" action="/get-tip-info" method="POST">
+    <!-- Confirm restaurant -->
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-5 col-lg-5">
+                <form name="show_restaurants" action="/get-tip-info" method="POST">
         
-        <p>What restaurant did you mean?</p>  
+                    <p>What restaurant did you mean?</p>  
         
-        <select name="restaurant" required>
+                    <select name="restaurant" required>
             
-            <option disabled selected value>Select your restaurant:</option>
+                        <option disabled selected value>Select your restaurant:</option>
             
-            {% for restaurant in restaurants_in_db %}
+                        {% for restaurant in restaurants_in_db %}
 
-                <option value="{{ restaurant['yelp_restaurant_id'] }}|{{ restaurant['name'].capitalize() }}|{{ restaurant['zipcode'] }}|{{ restaurant['address'] }}">
-                    {{ restaurant['name'].capitalize() }} ({{ restaurant['address'] }}) 
-                </option> 
+                            <option value="{{ restaurant['yelp_restaurant_id'] }}|{{ restaurant['name'].capitalize() }}|{{ restaurant['zipcode'] }}|{{ restaurant['address'] }}">
+                                {{ restaurant['name'].capitalize() }} ({{ restaurant['address'] }}) 
+                            </option> 
                 
-            {% endfor %}
-        </select>
+                        {% endfor %}
+                    </select>
         
-        <input type="submit" value="Go">
+                    <input type="submit" value="Go">
 
-    </form>
-    <br>
+                </form>
+                
+            </div>
 
-    <form name="restaurant_not_found" action="/search-again" method="POST"> 
+            <div class="col-12 col-md-5 col-lg-5">
+                    
+                <form name="restaurant_not_found" action="/search-again" method="POST">
+
+                    <p>It is no here!</p>
+
+                    <input type="hidden" name="restaurant_not_found" id="restaurant-not-found-field" value="{{ restaurant_name }}">
         
-        <input type="hidden" name="restaurant_not_found" id="restaurant-not-found-field" value="{{ restaurant_name }}">
-        
-        <input type="submit" name="notFound" id="notFound-button" value="It is no here -> Search again">
+                    <input type="submit" name="notFound" id="notFound-button" value="Search again">
 
-    </form>
-    <br>
+                </form>
+                <br>
 
-    <form hidden id="show_more_restaurants" action="/get-tip-info" method="POST">
+                <form hidden id="show_more_restaurants" action="/get-tip-info" method="POST">
         
-        <select name="possible-restaurants" id="possible-restaurants" required>
+                    <select name="possible-restaurants" id="possible-restaurants" required>
             
-        </select>
+                    </select>
 
-        <input type="submit" value="Go">
+                    <input type="submit" value="Go">
 
-    </form>
+                </form>
+            </div>
+
+            <div class="col-12 col-md-2 col-lg-2" id="map">
+                <img src="/static/img/logo.png" class="img-fluid,rounded" alt="Responsive image">
+            </div>   
+        </div>
+    </div>
 
     <!-- control the searching for new restaurants -->
     <script src="/static/js/confirmRestaurant.js"></script>
