@@ -28,12 +28,13 @@
             </ul>
         </div>
     </nav>
-    <br>
+    <br><br>
 
     <!-- Confirm restaurant -->
     <div class="container">
         <div class="row">
-            <div class="col-12 col-md-5 col-lg-5">
+            <div class="col-12 col-md-4 col-lg-4 card">
+                <div class="card-body">
                 <form name="show_restaurants" action="/get-tip-info" method="POST">
         
                     <p>What restaurant did you mean?</p>  
@@ -54,14 +55,16 @@
                     <input type="submit" value="Go">
 
                 </form>
-                
+                </div>
             </div>
 
-            <div class="col-12 col-md-5 col-lg-5">
-                    
+            <div class="col-12 col-md-5 col-lg-5 card">
+                
+                <div class="card-body">
+                <br>
                 <form name="restaurant_not_found" action="/search-again" method="POST">
 
-                    <p>It is no here!</p>
+                    <p>If your restaurant is not in the list, click 'Search again' until you find it.</p>
 
                     <input type="hidden" name="restaurant_not_found" id="restaurant-not-found-field" value="{{ restaurant_name }}">
         
@@ -79,10 +82,11 @@
                     <input type="submit" value="Go">
 
                 </form>
+                </div>
             </div>
 
-            <div class="col-12 col-md-2 col-lg-2" id="map">
-                <img src="/static/img/logo.png" class="img-fluid,rounded" alt="Responsive image">
+            <div class="col-12 col-md-3 col-lg-3 text-center">
+                <img src="/static/img/restaurant.png" class="border border-secondary">
             </div>   
         </div>
     </div>

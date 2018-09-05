@@ -53,7 +53,7 @@ def search_restaurants_by_name(name, city = "San Francisco"):
     return call_yelp_api(url)
 
 
-def search_restaurants_by_name_paginate(name, offset, city = "San Francisco"):
+def search_restaurants_by_name_paginate(name, limit, offset, city = "San Francisco"):
     """Search restaurant by name and city in YELP API,
     the search in YELP is not precise, so normally there are more than one
     restaurant in the response.
@@ -77,7 +77,7 @@ def search_restaurants_by_name_paginate(name, offset, city = "San Francisco"):
 
     """
 
-    url = "https://api.yelp.com/v3/businesses/search?categories=restaurants,bars,coffee&term={name}&location={city}&offset={offset}".format(name=name, city=city, offset=offset)
+    url = "https://api.yelp.com/v3/businesses/search?categories=restaurants,bars,coffee&term={name}&location={city}&limit={limit}&offset={offset}".format(name=name, city=city, limit=limit, offset=offset)
     
     return call_yelp_api(url)
 
@@ -108,7 +108,7 @@ def search_restaurants(city = "San Francisco"):
 
     restaurants = []
 
-    limit =20
+    limit =10
 
     num_requests = 2
 

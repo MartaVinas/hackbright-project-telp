@@ -32,33 +32,34 @@
 
     <!-- Header image -->
     <div class="text-center">
-        <img src="/static/img/header.png" class="img-fluid,rounded" alt="Responsive image">
+        <img src="/static/img/header.png" class="border border-secondary" alt="Responsive image">
     </div>
-    <br>
+
+    <br><br>
 
     <!-- Search by restaurant or zipcode -->
-    <div class="container" id="text-center-to-div">
-        
-        <form name="search_restaurant" action="/search-restaurant" method="GET">
-            <div>
+    <div class="container card" id="text-center-to-div">
+        <div class="card-body">
+            <form name="search_restaurant" action="/search-restaurant" method="GET">
+            
                 <label> Restaurant name: 
                     <input type="text" name="restaurant_name" required="False">
                     <input type="submit" name="search" value="Search by Restaurant">
                 </label>
-            </div>
-        </form><br>
+
+            </form><br>
         
-        <form name="search_zipcode" action="/search-zipcode" method="GET">
-            <div>
+            <form name="search_zipcode" action="/search-zipcode" method="GET">
+        
                 <label> Zipcode: 
                     <input type="text" name="zipcode" required="False">
                     <input type="submit" name="search" value="Search by Zipcode">
                 </label>
-            </div>
-        </form><br>
+            
+            </form><br>
      
-        <div>Introduce the restaurant name or the zipcode and it will show the average tip and a tip-calculator to help you out.</div>
-        
+            <div>Introduce the restaurant name or the zipcode and it will show the average tip and a tip-calculator to help you out.</div>
+        </div>  
     </div>
 
   

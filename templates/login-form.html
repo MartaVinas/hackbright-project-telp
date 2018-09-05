@@ -30,27 +30,28 @@
     <br>
 
     <!-- Login form -->
-    <div class="container" id="text-center-to-div">
-        
-        <h1>Login</h1>
-        <form action="/login" method="POST">
-            <div>
-                <label>Username:
-                    <input type="username" name="username" required>
-                </label>
-            </div>
+    <div class="container card" id="text-center-to-div">
+        <div class="card-body">
+            <h1>Login</h1>
+            <form action="/login" method="POST">
+                <div>
+                    <label>Username:
+                        <input type="username" name="username" required>
+                    </label>
+                </div>
 
-            <div>
-                <label>Password:
-                    <input type="password" name="password" required>
-                </label>
-            </div>
+                <div>
+                    <label>Password:
+                        <input type="password" name="password" required>
+                    </label>
+                </div>
 
-            <div>
-                <input type="submit" value="Log In">
-            </div>
+                <div>
+                    <input type="submit" value="Log In">
+                </div>
 
-        </form>
+            </form>
+        </div>
     </div>
 
 {% endblock %}

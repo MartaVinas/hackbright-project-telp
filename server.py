@@ -8,7 +8,6 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy import func
-# from sqlalchemy import func, update
 
 from model import Restaurant, Meal, Admin, connect_to_db, db
 from yelp_requests import search_restaurants_by_name, search_restaurants, search_restaurants_by_name_paginate, search_restaurants_by_id
@@ -158,7 +157,7 @@ def search_again():
 
     num_of_clicks = int(request.form.get("counter"))
 
-    limit = 20
+    limit = 6
     offset = 0
 
     if num_of_clicks == 2:
@@ -166,7 +165,7 @@ def search_again():
     elif num_of_clicks > 2:
         offset = num_of_clicks * limit
 
-    restaurants = search_restaurants_by_name_paginate(restaurant_name, offset)
+    restaurants = search_restaurants_by_name_paginate(restaurant_name, limit, offset)
 
     add_restaurants_to_db(restaurants)
     

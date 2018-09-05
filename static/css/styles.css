@@ -10,3 +10,21 @@
 #text-center-to-div{
     padding-left: 200px;
 }
+
+body {
+    font-family: "Arial", sans-serif;
+    background-image: url(/static/img/cloth.png);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Arial", sans-serif;
+    font-weight: bold;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: white;
+}
+
+.bg-light {
+    background-color: rgba(215, 98, 108, 1)!important;
+}

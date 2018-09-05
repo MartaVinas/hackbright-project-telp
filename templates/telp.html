@@ -31,14 +31,14 @@
     <br>
 
     <!-- Average info, tip Calculator and map -->
-    <div class="container">
-        <div class="row">
+    <div class="container card">
+        <div class="row card-body">
             <div class="col-12 col-md-6 col-lg-6">
                 <!-- Show average info -->
                 <ul>
                 <!-- if user search by restaurant -->
                 {% if restaurant_name %} 
-                    <h4>Restaurant {{ restaurant_name }} ({{ restaurant_address }})</h4>
+                    <h2>Restaurant {{ restaurant_name }} ({{ restaurant_address }})</h2>
 
                     {% if average_tip_lunch %}
                         <li>Lunch average tip: {{ average_tip_lunch }} %</li>
@@ -68,10 +68,11 @@
 
                 {% endif %}
                 </ul>
+                <br>
 
                 <!-- show tip calculator -->
                 <ul>
-                    <h3>Tip Calculator</h3>
+                    <h2>Tip Calculator</h2>
                     <form name="meal" action="/new-meal" id="meal" method="POST">
 
                     <!-- only if user search by restaurant -->
@@ -106,8 +107,18 @@
                 </ul>
             </div>
 
-            <!-- show the map -->
-            <div class="col-12 col-md-6 col-lg-6" id="map"></div>   
+            {% if restaurant_name or zipcode %}
+                <!-- show the map -->
+                <div class="col-12 col-md-6 col-lg-6 border border-secondary" id="map"></div>
+            
+            {% else %}
+            <!-- show a picture -->
+                <div class="col-12 col-md-6 col-lg-6 ">
+                    <br><br>
+                    <img src="/static/img/calculator.png">
+                </div> 
+
+            {% endif %}
         </div>
     </div>
 
