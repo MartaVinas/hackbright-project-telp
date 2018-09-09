@@ -34,20 +34,23 @@
         <div class="card-body">
             <h1>Login</h1>
             <form action="/login" method="POST">
-                <div>
-                    <label>Username:
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label"> Username:</label>
+                    <div class="input-group col-sm-9">
                         <input type="username" name="username" required>
-                    </label>
+                    </div>
                 </div>
 
-                <div>
-                    <label>Password:
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label"> Password:</label>
+                    <div class="input-group col-sm-9">
                         <input type="password" name="password" required>
-                    </label>
+                    </div>
                 </div>
 
                 <div>
-                    <input type="submit" value="Log In">
+                    <input type="submit" class="btn btn-secondary" value="Log In">
                 </div>
 
             </form>

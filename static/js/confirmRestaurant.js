@@ -17,13 +17,13 @@ function showResults(results){
         
         let id = restaurant['id'];
       
-        let rest_name = restaurant['name'];
+        let rest_name = restaurant['name'].replace(/'/g, "&apos;").replace(/"/g, "&quot;");
 
         let zipcode = restaurant['location']['zip_code'];
 
         let address = restaurant['location']['address1'];
 
-        let restaurant_option = strOrigin.concat(id, pip, rest_name, pip, zipcode, pip, address, strFinal) + rest_name + "(" + address + ")</option>";
+        let restaurant_option = strOrigin.concat(id, pip, rest_name, pip, zipcode, pip, address, strFinal) + rest_name + " (" + address + ")</option>";
 
         $("#possible-restaurants").prepend(restaurant_option);
     }
@@ -32,7 +32,7 @@ function showResults(results){
     
     $("#possible-restaurants").prepend(separator);
 
-    let first_option = "<option disabled selected value>Is now your restaurant here? Select it:</option>"
+    let first_option = "<option disabled selected value>Select your restaurant:</option>"
     
     $("#possible-restaurants").prepend(first_option);
 
@@ -47,6 +47,7 @@ function searchAgain(evt) {
     count = count + 1;
 
     $('#show_more_restaurants').removeAttr('hidden');
+    $('#first-search').hide();
 
     // get the restaurant name from confirm-restaurant.html restaurant_not_found form
     let name_and_counter = {

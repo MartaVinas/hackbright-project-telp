@@ -7,9 +7,9 @@
 
 function showResults(results){ 
     // get the results from /new-meal and set it into the browser elements(telp.html)
-    $("#tip_in_dollars").html(results["tip_in_dollars"]);
-    $("#total_price").html(results["total_price"]);
-    $("#price_per_diner").html(results["price_per_diner"]);
+    $("#tip_in_dollars").val(results["tip_in_dollars"]);
+    $("#total_price").val(results["total_price"]);
+    $("#price_per_diner").val(results["price_per_diner"]);
 }
 
 

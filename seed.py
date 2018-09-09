@@ -114,5 +114,7 @@ if __name__ == '__main__':
     get_fake_restaurants()
 
     get_meals()
+    get_meals()
+    get_meals()
 
     get_admin()

@@ -119,10 +119,11 @@ def get_average_tip():
     
     if restaurant_first_search is not None:
         restaurant_choosen = restaurant_first_search
-
+        print("rest first search", restaurant_first_search)
     if restaurant_second_search is not None:
         restaurant_choosen = restaurant_second_search
-
+        print("rest second search", restaurant_second_search)
+    print("rest chosen", restaurant_choosen)
     # get restaurant from confirm-restaurant.html show_restaurants form
     restaurant_yelp_id, restaurant_name, restaurant_zipcode, restaurant_address = restaurant_choosen.split("|")
     

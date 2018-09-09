@@ -41,20 +41,30 @@
     <div class="container card" id="text-center-to-div">
         <div class="card-body">
             <form name="search_restaurant" action="/search-restaurant" method="GET">
-            
-                <label> Restaurant name: 
-                    <input type="text" name="restaurant_name" required="False">
-                    <input type="submit" name="search" value="Search by Restaurant">
-                </label>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Restaurant name:</label>
+                    <div class="col-sm-3">
+                        <input type="text" name="restaurant_name" required="False">
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="submit" class="btn btn-secondary" name="search" value="Search by Restaurant"></input>
+                    </div>
+                </div>
 
             </form><br>
         
             <form name="search_zipcode" action="/search-zipcode" method="GET">
         
-                <label> Zipcode: 
-                    <input type="text" name="zipcode" required="False">
-                    <input type="submit" name="search" value="Search by Zipcode">
-                </label>
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Zipcode:</label>
+                    <div class="col-sm-3">
+                        <input type="text" name="zipcode" required="False">
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="submit" class="btn btn-secondary" name="search" value="Search by zipcode"></input>
+                    </div>
+                </div>
             
             </form><br>
      
@@ -62,5 +72,4 @@
         </div>  
     </div>
 
-  
 {% endblock %}

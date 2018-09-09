@@ -11,6 +11,10 @@
     padding-left: 200px;
 }
 
+#dinner-field {
+    margin-left: 30px;
+}
+
 body {
     font-family: "Arial", sans-serif;
     background-image: url(/static/img/cloth.png);
@@ -21,7 +25,17 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
 }
 
-.navbar-light .navbar-nav .nav-link {
+#rest-form {
+    width: 100%;
+    padding-right: 0;
+    padding-left: 0;
+    margin-right: 5%;
+    margin-left: 6%;
+    margin-top:3%;
+}
+
+
+.navbar-light .navbar-nav .active>.nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show>.nav-link {
     color: white;
 }
 

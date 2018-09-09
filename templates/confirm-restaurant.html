@@ -31,15 +31,15 @@
     <br><br>
 
     <!-- Confirm restaurant -->
-    <div class="container">
+    <div class="container" id="rest-form">
         <div class="row">
-            <div class="col-12 col-md-4 col-lg-4 card">
+            <div class="col-12 col-md-5 col-lg-5 card">
                 <div class="card-body">
-                <form name="show_restaurants" action="/get-tip-info" method="POST">
+                <form name="show_restaurants" class="row" id="first-search" action="/get-tip-info" method="POST">
         
                     <p>What restaurant did you mean?</p>  
         
-                    <select name="restaurant" required>
+                    <select class="form-control col-10" name="restaurant" required>
             
                         <option disabled selected value>Select your restaurant:</option>
             
@@ -50,42 +50,43 @@
                             </option> 
                 
                         {% endfor %}
+
+                        <input type="submit"  class="btn btn-secondary col-2" value="Go">
                     </select>
-        
-                    <input type="submit" value="Go">
 
                 </form>
+
+                <form hidden id="show_more_restaurants" class="row" action="/get-tip-info" method="POST">
+                    <p>Is your restaurant here now? </p>
+        
+                    <select class="form-control col-10" name="possible-restaurants" id="possible-restaurants" required>
+            
+                    </select>
+
+                    <input type="submit" class="btn btn-secondary col-2" value="Go">
+
+                </form>
+
                 </div>
             </div>
 
             <div class="col-12 col-md-5 col-lg-5 card">
                 
                 <div class="card-body">
-                <br>
+
                 <form name="restaurant_not_found" action="/search-again" method="POST">
-
-                    <p>If your restaurant is not in the list, click 'Search again' until you find it.</p>
-
+                    <p><strong>The restaurant is not in the list!</strong></p>
+                    <p>Click 'Look for more' until you find it.</p>
                     <input type="hidden" name="restaurant_not_found" id="restaurant-not-found-field" value="{{ restaurant_name }}">
         
-                    <input type="submit" name="notFound" id="notFound-button" value="Search again">
+                    <input type="submit" name="notFound" id="notFound-button" class="btn btn-secondary" value="Look for more">
 
                 </form>
-                <br>
 
-                <form hidden id="show_more_restaurants" action="/get-tip-info" method="POST">
-        
-                    <select name="possible-restaurants" id="possible-restaurants" required>
-            
-                    </select>
-
-                    <input type="submit" value="Go">
-
-                </form>
                 </div>
             </div>
 
-            <div class="col-12 col-md-3 col-lg-3 text-center">
+            <div class="col-12 col-md-2 col-lg-2 text-center">
                 <img src="/static/img/restaurant.png" class="border border-secondary">
             </div>   
         </div>

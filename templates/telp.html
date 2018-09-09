@@ -34,45 +34,45 @@
     <div class="container card">
         <div class="row card-body">
             <div class="col-12 col-md-6 col-lg-6">
+
                 <!-- Show average info -->
-                <ul>
+                
                 <!-- if user search by restaurant -->
                 {% if restaurant_name %} 
-                    <h2>Restaurant {{ restaurant_name }} ({{ restaurant_address }})</h2>
-
+                    <h3>Restaurant {{ restaurant_name }}</h3>
+                    <h4>{{ restaurant_address }}</h4>
+                    <div class="alert alert-info" id="average-info">
                     {% if average_tip_lunch %}
-                        <li>Lunch average tip: {{ average_tip_lunch }} %</li>
-                    {% endif %}
+                        <p>Lunch average tip: {{ average_tip_lunch }} %
+                    {% endif %}</p>
 
                     {% if average_tip_dinner %}
-                        <li>Dinner average tip: {{ average_tip_dinner }} %</li>
-                    {% endif %}
+                        <p>Dinner average tip: {{ average_tip_dinner }} %
+                    {% endif %}</p>
 
                     {% if not average_tip_dinner and not average_tip_lunch %}
-                        <li>Sorry, there is no average information for restaurant {{ restaurant_name }}. Put your price and the tip and be the first one to contribute!</li>
+                        <p>Sorry, there is no average information for restaurant {{ restaurant_name }}. Put your price and the tip and be the first one to contribute!</p>
                     {% endif %}
-
+                    </div>
                 {% endif %}
 
                 <!-- if user search by zipcode -->
                 {% if zipcode %} 
-                    <h2>Zipcode {{ zipcode }}</h2>
-        
+                    <h3>Zipcode {{ zipcode }}</h3>
+                    <div class="alert alert-info" id="average-info">
                     {% if average_tip_lunch %}
-                        <li>Lunch average tip: {{ average_tip_lunch }} %</li>
-                    {% endif %}
+                        <p>Lunch average tip: {{ average_tip_lunch }} %
+                    {% endif %}</p>
                 
                     {% if average_tip_dinner %}
-                        <li>Dinner average tip: {{ average_tip_dinner }} %</li>
-                    {% endif %}
-
+                        <p>Dinner average tip: {{ average_tip_dinner }} %
+                    {% endif %}</p>
+                    </div>
                 {% endif %}
-                </ul>
-                <br>
 
                 <!-- show tip calculator -->
                 <ul>
-                    <h2>Tip Calculator</h2>
+                    <h3>Tip Calculator</h3>
                     <form name="meal" action="/new-meal" id="meal" method="POST">
 
                     <!-- only if user search by restaurant -->
@@ -82,26 +82,75 @@
                         <input type="hidden" name="restaurant_address" id="restaurant-address-field" value="{{ restaurant_address }}">
                     {% endif %}
 
-                        <p> Price(*): $ <input type="number" min="0" step="0.01" maxlength="6" name="price" id="price-field" required></p>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"> Price (*):</label>
+                            <div class="input-group col-sm-9">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"> $ </div>
+                                </div>
+                                <input type="number" min="0" step="0.01" maxlength="6" name="price" id="price-field" required>  
+                            </div>
+                        </div>
 
-                        <p> Tip(*): <input type="number" min="0" step="1" maxlength="3" name="percentage_tip" id="percentage-tip-field" required> %</p>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"> Tip (*):</label>
+                            <div class="input-group col-sm-9">
+                                <input type="number" min="0" step="1" maxlength="3" name="percentage_tip" id="percentage-tip-field" required>
+                                <div class="input-group-append">
+                                    <div class="input-group-text"> % </div>
+                                </div>
+                            </div>
+                        </div>
 
-                        <p> # Diners: <input type="number" min="1" step="1" maxlength="3" name="diners" id="diners-field" value=1></p>
-                        <p> Meal type(*):
-                            <input type="radio" name="meal_type" id="lunch-field" value="lunch"> Lunch
-                            <input type="radio" name="meal_type" id="dinner-field" value="dinner" checked> Dinner
-                        </p>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"> # Diners:</label>
+                            <div class="input-group col-sm-9">
+                                <input type="number" min="1" step="1" maxlength="3" name="diners" id="diners-field" value=1>
+                            </div>
+                        </div>
 
-                        <input type="submit" id="calculate" value="Calculate">
-                        <br>
-                        <br>
+                        <div class="form-group row">
+                            <legend class="col-form-label col-sm-3"> Meal type (*)</legend>
+                            <div class="col-sm-9">
+                                <input type="radio" name="meal_type" id="lunch-field" value="lunch"> Lunch
+                                <input type="radio" name="meal_type" id="dinner-field" value="dinner" checked> Dinner
+                            </div>
+                        </div>
+
+                        <input type="submit" id="calculate" class="btn btn-secondary" value="Calculate">
             
-                        <div hidden id="results">
-                            <p> Tip: $ <span id="tip_in_dollars"></span></p>
+                        <div hidden id="results" class="container">
+                            
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label"> Tip:</label>
+                                <div class="input-group col-sm-9">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text"> $ </div>
+                                    </div>
+                                    <input id="tip_in_dollars">  
+                                </div>
+                            </div>
 
-                            <p> Total price: $ <span id="total_price"></span></p>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label"> Total price: </label>
+                                <div class="input-group col-sm-9">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text"> $ </div>
+                                    </div>
+                                    <input id="total_price">  
+                                </div>
+                            </div>
 
-                            <p> Total price/diner: $ <span id="price_per_diner"></span></p>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label"> Price/diner: </label>
+                                <div class="input-group col-sm-9">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text"> $ </div>
+                                    </div>
+                                    <input id="price_per_diner">  
+                                </div>
+                            </div>
+
                         </div>
                     </form>
                 </ul>
