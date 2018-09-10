@@ -159,12 +159,7 @@ def search_again():
     num_of_clicks = int(request.form.get("counter"))
 
     limit = 6
-    offset = 0
-
-    if num_of_clicks == 2:
-        offset = limit
-    elif num_of_clicks > 2:
-        offset = num_of_clicks * limit
+    offset = num_of_clicks * limit
 
     restaurants = search_restaurants_by_name_paginate(restaurant_name, limit, offset)
 
@@ -423,7 +418,7 @@ if __name__ == "__main__":
     # that we invoke the DebugToolbarExtension
 
     # Do not debug for demo
-    app.debug = True
+    #app.debug = True
 
     connect_to_db(app)
 

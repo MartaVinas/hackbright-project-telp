@@ -47,8 +47,9 @@ def search_restaurants_by_name(name, city = "San Francisco"):
     }
 
     """
+    limit = 6
 
-    url = "https://api.yelp.com/v3/businesses/search?categories=restaurants,bars,coffee&term={name}&location={city}".format(name=name, city=city)
+    url = "https://api.yelp.com/v3/businesses/search?categories=restaurants,bars,coffee&term={name}&location={city}&limit={limit}".format(name=name, city=city, limit=limit)
     
     return call_yelp_api(url)
 
